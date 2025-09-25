@@ -1,45 +1,27 @@
 package entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Paciente {
     private String nome;
-    private int cpf;
+    private Long cpf;
     private int idade;
-    public String historico;
-    public String internacoes;
+    private List<Internacao> internacoes =  new ArrayList<>();
+    private List<Consultas> historico =  new ArrayList<>();
 
-    public Paciente(String nome, int cpf, int idade, String historico, String internacoes) {
+    public Paciente(String nome, Long cpf, int idade) {
         this.nome = nome;
         this.cpf = cpf;
         this.idade = idade;
-        this.historico = historico;
-        this.internacoes = internacoes;
-    }
-    public String getNome() {
-        return this.nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getInternacoes() {
-        return internacoes;
-    }
-
-    public void setInternacoes(String internacoes) {
-        this.internacoes = internacoes;
-    }
-
-    public int getCpf() {
+    public Long getCpf() {
         return cpf;
     }
 
-    public String getHistorico() {
-        return historico;
-    }
-
-    public void setHistorico(String historico) {
-        this.historico = historico;
+    public void setCpf(Long cpf) {
+        this.cpf = cpf;
     }
 
     public int getIdade() {
@@ -48,5 +30,13 @@ public class Paciente {
 
     public void setIdade(int idade) {
         this.idade = idade;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }
