@@ -15,7 +15,6 @@ public class Consultas
 
     public Consultas() {
     }
-
     public Consultas(LocalDateTime dataHora, String diagnostico, String local, String medico, Paciente paciente, StatusConsulta statusConsulta) {
         this.dataHora = dataHora;
         this.diagnostico = diagnostico;

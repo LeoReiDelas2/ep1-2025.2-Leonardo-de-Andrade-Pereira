@@ -30,4 +30,27 @@ public class InputHandler
             }
         }
     }
+    static public <T extends Enum<T>> T digitarEnum(String mensagem, Scanner scanner, Class<T> enumClass){
+        T[] options = enumClass.getEnumConstants();
+
+        while (true) {
+            System.out.println(mensagem);
+
+            System.out.println("Opções disponíveis:");
+            for (T option : options) {
+                System.out.println("- " + option.name());
+            }
+            System.out.print("Digite a opção desejada: ");
+
+            try {
+                String texto = scanner.nextLine().trim().toUpperCase();
+                T escolha = T.valueOf(enumClass, texto);
+                return escolha;
+
+            } catch (IllegalArgumentException e) {
+                System.out.println("\nOpção inválida. Por favor, digite exatamente uma das opções listadas.\n");
+            }
+        }
+
+    }
 }
