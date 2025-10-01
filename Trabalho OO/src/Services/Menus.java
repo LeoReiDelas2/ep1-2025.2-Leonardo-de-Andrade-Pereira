@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Menus
 {
-    public void menuCadastros(Scanner scanner)
+    public void menuCadastros(Scanner scanner, Hospital Hospital)
     {
         System.out.print("Seja bem-vindo ao menu de cadastro!\n");
         Integer escolha = InputHandler.digitarIntIntervalo("" +

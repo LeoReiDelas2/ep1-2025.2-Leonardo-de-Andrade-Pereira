@@ -7,6 +7,9 @@ import utils.*;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Menus Menus = new Menus();
+        Hospital hospital = new Hospital();
         Scanner sc = new Scanner(System.in);
 
         int escolha;
@@ -18,11 +21,10 @@ public class Main {
             switch (escolha)
             {
                 case 1:
-                    Menus.menuCadastros(sc);
+                    Menus.menuCadastros(sc, hospital);
                     break;
 
                 case 2:
-                    InputHandler.digitarEnum("Boa", sc, AreaDeEspecialidade.class);
                     break;
 
                 case 0:
