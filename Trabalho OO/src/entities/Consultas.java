@@ -12,6 +12,7 @@ public class Consultas
     private String local;
     private StatusConsulta statusConsulta;
     private String diagnostico;
+    private Especialidade especialidadeDaConsulta;
 
     public Consultas() {
     }
@@ -22,6 +23,7 @@ public class Consultas
         this.medico = medico;
         this.paciente = paciente;
         this.statusConsulta = statusConsulta;
+        this.especialidadeDaConsulta = especialidadeDaConsulta;
     }
 
     public LocalDateTime getDataHora() {
@@ -38,6 +40,9 @@ public class Consultas
 
     public String getMedico() {
         return medico;
+    }
+    public Especialidade getEspecialidadeDaConsulta() {
+        return especialidadeDaConsulta;
     }
 
     public StatusConsulta getStatusConsulta() {

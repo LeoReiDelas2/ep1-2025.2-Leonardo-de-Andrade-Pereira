@@ -1,5 +1,4 @@
 package entities;
-import enums.AreaDeEspecialidade;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,15 +6,15 @@ public class Medico {
     private String nome;
     private String crm;
     private Double custoDaConsulta;
-    private AreaDeEspecialidade areaDeEspecialidade;
     List<LocalDateTime> agendaOcupada;
+    private List<Especialidade> especialidades;
 
-    public Medico(AreaDeEspecialidade areaDeEspecialidade, String crm, Double custoDaConsulta, String nome) {
+    public Medico(String crm, Double custoDaConsulta, String nome) {
         this.agendaOcupada = new ArrayList<>();
-        this.areaDeEspecialidade = areaDeEspecialidade;
         this.crm = crm;
         this.custoDaConsulta = custoDaConsulta;
         this.nome = nome;
+        this.especialidades = new ArrayList<>();
     }
 
     public String getNome() {
@@ -24,6 +23,12 @@ public class Medico {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public void adicionarEspecialidade(Especialidade especialidade) {
+        if (!this.especialidades.contains(especialidade)) {
+            this.especialidades.add(especialidade);
+        }
     }
 
     public Double getCustoDaConsulta() {
@@ -38,10 +43,6 @@ public class Medico {
         return crm;
     }
 
-    public AreaDeEspecialidade getAreaDeEspecialidade() {
-        return areaDeEspecialidade;
-    }
-
     public void adicionarAgendaOcupada(LocalDateTime agendaOcupada) {
         this.agendaOcupada.add(agendaOcupada);
     }
@@ -50,10 +51,13 @@ public class Medico {
     }
     public String mostrarInformacoes()
     {
-        return "Nome : " + nome + "\nCusto da consulta: " + custoDaConsulta + "\nArea de especialidade" + areaDeEspecialidade + "\nCrm: " + crm;
+        return "Nome : " + nome + "\nCusto da consulta: " + custoDaConsulta + "\nArea de especialidade" + "\nCrm: " + crm;
     }
     public boolean isDisponivel(LocalDateTime horario) {
         return !this.agendaOcupada.contains(horario);
     }
 
+    public List<Especialidade> getEspecialidades() {
+        return especialidades;
+    }
 }
