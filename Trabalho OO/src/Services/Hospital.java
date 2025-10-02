@@ -1,6 +1,7 @@
 package Services;
 
 import entities.*;
+import utils.InputHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,12 +125,56 @@ public class Hospital {
         }
 
     }
-    static public void cadastrarPlanoDeSaude(Scanner scanner)
-    {
-        System.out.println("-------------------------------" +
-                "\nCadastro de Novo Plano de Saúde\n" +
-                "-------------------------------");
-
+    public void cadastrarPlanoDeSaude(Scanner scanner) {
+        System.out.println("\n--- Cadastro de Novo Plano de Saúde ---");
+        String nome;
+        while (true) {
+            nome = InputHandler.lerTextoNaoVazio("Digite o nome do plano: ", scanner);
+            boolean existe = false;
+            for (PlanoDeSaude p : this.planoDeSaude) {
+                if (p.getNome().equalsIgnoreCase(nome)) {
+                    existe = true;
+                    break;
+                }
+            }
+            if (existe) {
+                System.out.println("Erro: Já existe um plano com este nome. Escolha outro.");
+                continue;
+            }
+            break;
+        }
+        boolean isEspecial = InputHandler.lerSimNao("Este é um plano especial (internação curta gratuita)? (S/N): ", scanner);
+        PlanoDeSaude novoPlano = new PlanoDeSaude(nome, isEspecial);
+        System.out.println("\n--- Configurar Coberturas de Desconto ---");
+        if (this.especialidades.isEmpty()) {
+            System.out.println("ERRO: Nenhuma especialidade cadastrada. O plano será criado sem coberturas.");
+        } else {
+            while (true) {
+                System.out.println("\nEspecialidades disponíveis:");
+                for (int i = 0; i < this.especialidades.size(); i++) {
+                    System.out.println((i + 1) + " - " + this.especialidades.get(i).getNome());
+                }
+                int escolha = InputHandler.digitarIntIntervalo(
+                        "Digite o número da especialidade para adicionar cobertura (ou 0 para finalizar): ",
+                        scanner,
+                        0,
+                        this.especialidades.size()
+                );
+                if (escolha == 0) {
+                    break;
+                }
+                Especialidade espEscolhida = this.especialidades.get(escolha - 1);
+                double desconto = InputHandler.lerDoubleIntervalo(
+                        "Digite o desconto para " + espEscolhida.getNome() + " (0.0 a 1.0, ex: 0.2): ",
+                        0.0,
+                        1.0,
+                        scanner
+                );
+                novoPlano.adicionarCobertura(espEscolhida, desconto);
+            }
+        }
+        this.planoDeSaude.add(novoPlano);
+        System.out.println("\n--- Plano de Saúde '" + novoPlano.getNome() + "' cadastrado com sucesso! ---");
     }
 
 

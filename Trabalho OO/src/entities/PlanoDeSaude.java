@@ -15,6 +15,7 @@ public class PlanoDeSaude
         this.economia = 0.0;
         this.especial = especial;
         this.coberturaDescontos = new HashMap<>();
+        this.nome  = nome;
     }
     public void adicionarCobertura(Especialidade especialidade, double desconto) {
         if (desconto >= 0.0 && desconto <= 1.0) {
@@ -42,6 +43,14 @@ public class PlanoDeSaude
         if (valorEconomizado > 0) {
             this.economia += valorEconomizado;
         }
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public double getDescontoPara(Especialidade especialidade) {
