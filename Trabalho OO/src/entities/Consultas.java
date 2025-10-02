@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class Consultas
 {
     private Paciente paciente;
-    private String medico;
+    private Medico medico;
     private LocalDateTime dataHora;
     private String local;
     private StatusConsulta statusConsulta;
@@ -16,7 +16,7 @@ public class Consultas
 
     public Consultas() {
     }
-    public Consultas(LocalDateTime dataHora, String diagnostico, String local, String medico, Paciente paciente, StatusConsulta statusConsulta) {
+    public Consultas(LocalDateTime dataHora, String diagnostico, String local, Medico medico, Paciente paciente, StatusConsulta statusConsulta) {
         this.dataHora = dataHora;
         this.diagnostico = diagnostico;
         this.local = local;
@@ -39,7 +39,7 @@ public class Consultas
     }
 
     public String getMedico() {
-        return medico;
+        return medico.getNome();
     }
     public Especialidade getEspecialidadeDaConsulta() {
         return especialidadeDaConsulta;

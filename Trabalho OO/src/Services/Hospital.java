@@ -56,7 +56,6 @@ public class Hospital {
             double custo = scanner.nextDouble();
             scanner.nextLine();
             Medico novoMedico = new Medico(crm, custo, nome);
-
             System.out.println("\n--- Adicionar Especialidades ---");
             while (true) {
                 System.out.print("Digite o nome de uma especialidade para adicionar (ou digite 'fim' para terminar): ");
@@ -70,7 +69,6 @@ public class Hospital {
                 }
                 Especialidade especialidade = getOrCreateEspecialidadePorNome(nomeEspecialidade);
                 novoMedico.adicionarEspecialidade(especialidade);
-                System.out.println("Especialidade '" + especialidade.getNome() + "' adicionada ao Dr(a). " + nome);
             }
             this.medicos.add(novoMedico);
             System.out.println("\n--- Médico Cadastrado com Sucesso! ---");
@@ -79,6 +77,52 @@ public class Hospital {
             System.out.println("Erro: Entrada inválida. O custo da consulta deve ser um número.");
             scanner.nextLine();
         }
+    }
+    public void cadastrarPaciente(Scanner scanner) {
+        try {
+            System.out.println("\n--- Cadastro de Novo Paciente ---");
+            System.out.print("Digite o nome do paciente: ");
+            String nome = scanner.nextLine();
+            System.out.print("Digite o CPF do paciente: ");
+            String cpf = scanner.nextLine();
+            System.out.print("Digite a idade do paciente: ");
+            Integer idade = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("O paciente possui plano de saúde? (S/N) ");
+            String planoSaude = scanner.nextLine();
+            Paciente novoPaciente = null;
+            int contador = 1;
+            if (planoSaude.equalsIgnoreCase("S")){
+                if (this.planoDeSaude.isEmpty()) {
+                    System.out.println("Não há um plano cadastrado, é necessário cadastrar um plano primeiro." +
+                            "\nO paciente será cadastrado como um paciente comum.");
+                    novoPaciente = new Paciente(nome, cpf, idade);
+                }
+                else{
+                    for (PlanoDeSaude plano : this.planoDeSaude) {
+                        System.out.println(contador + " - " + plano);
+                        contador++;
+                    }
+                    System.out.println("Digite o número do plano do paciente: ");
+                    Integer numeroPlano = scanner.nextInt();
+                    scanner.nextLine();
+                    PlanoDeSaude planoescolhido = this.planoDeSaude.get(numeroPlano-1);
+                    novoPaciente = new PacienteEspecial(nome, cpf, idade, planoescolhido);
+                }
+            }
+            else {
+                Paciente paciente = new Paciente(nome, cpf, idade);
+            }
+            this.pacientes.add(novoPaciente);
+            System.out.println("\n--- Paciente Cadastrado com Sucesso! ---");
+            System.out.println(novoPaciente);
+        } catch (java.util.InputMismatchException e) {
+            System.out.println("Erro: Entrada inválida. A idade deve ser um número.");
+            scanner.nextLine();
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Erro: Opção de plano de saúde inválida. Tente o cadastro novamente.");
+        }
+
     }
     static public void cadastrarPlanoDeSaude(Scanner scanner)
     {

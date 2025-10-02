@@ -17,6 +17,9 @@ public class Menus
         switch (escolha) {
             case 0:
                 return;
+            case 1:
+                Hospital.cadastrarPaciente(scanner);
+                break;
             case 2:
                 Hospital.cadastrarMedico(scanner);
                 break;

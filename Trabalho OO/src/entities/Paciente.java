@@ -5,22 +5,22 @@ import java.util.List;
 
 public class Paciente {
     private String nome;
-    private Long cpf;
+    private String cpf;
     private int idade;
     private List<Internacao> internacoes =  new ArrayList<>();
     private List<Consultas> historico =  new ArrayList<>();
 
-    public Paciente(String nome, Long cpf, int idade) {
+    public Paciente(String nome, String cpf, int idade) {
         this.nome = nome;
         this.cpf = cpf;
         this.idade = idade;
     }
 
-    public Long getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(Long cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
@@ -38,5 +38,10 @@ public class Paciente {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    @Override
+    public String toString() {
+        return "Nome: " + nome + "\nCPF: " + cpf + "\nIdade: " + idade;
     }
 }
