@@ -21,10 +21,10 @@ public class Menus
                 menuCadastros(scanner, hospital);
                 break;
             case 2:
-                System.out.println("--> nada");
+                hospital.agendarConsulta(scanner);
                 break;
             case 3:
-                System.out.println("--> nada");
+                System.out.println("--> nadaa");
                 break;
             case 0:
                 break;

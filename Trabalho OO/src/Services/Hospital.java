@@ -1,11 +1,16 @@
 package Services;
 
 import entities.*;
+import enums.StatusConsulta;
 import utils.InputHandler;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import static utils.Searcher.*;
 
 public class Hospital {
     private List<Paciente> pacientes;
@@ -15,6 +20,7 @@ public class Hospital {
     private List<PlanoDeSaude> planoDeSaude;
     private List<Quarto> quartos;
     private List<Especialidade> especialidades;
+    private List<String> consultorios;
 
     public Hospital() {
         this.pacientes = new ArrayList<>();
@@ -24,8 +30,14 @@ public class Hospital {
         this.planoDeSaude = new ArrayList<>();
         this.quartos = new ArrayList<>();
         this.especialidades = new ArrayList<>();
+        this.consultorios = new ArrayList<>();
+        this.consultorios.add("Consultório 1");
+        this.consultorios.add("Consultório 2");
+        this.consultorios.add("Consultório 3");
+        this.consultorios.add("Consultório 4");
+        this.consultorios.add("Consultório 5");
     }
-    private void carregarEspecialidadesPadrao() {
+    public void carregarEspecialidadesPadrao() {
         this.especialidades.add(new Especialidade("Cardiologia"));
         this.especialidades.add(new Especialidade("Pediatria"));
         this.especialidades.add(new Especialidade("Ortopedia"));
@@ -46,7 +58,8 @@ public class Hospital {
         return novaEspecialidade;
     }
 
-    public void cadastrarMedico(Scanner scanner) {
+    public void cadastrarMedico(Scanner scanner)
+    {
         try {
             System.out.println("\n--- Cadastro de Novo Médico ---");
             System.out.print("Digite o nome do médico: ");
@@ -79,7 +92,8 @@ public class Hospital {
             scanner.nextLine();
         }
     }
-    public void cadastrarPaciente(Scanner scanner) {
+    public void cadastrarPaciente(Scanner scanner)
+    {
         try {
             System.out.println("\n--- Cadastro de Novo Paciente ---");
             System.out.print("Digite o nome do paciente: ");
@@ -112,7 +126,7 @@ public class Hospital {
                 }
             }
             else {
-                Paciente paciente = new Paciente(nome, cpf, idade);
+                novoPaciente = new Paciente(nome, cpf, idade);
             }
             this.pacientes.add(novoPaciente);
             System.out.println("\n--- Paciente Cadastrado com Sucesso! ---");
@@ -125,7 +139,8 @@ public class Hospital {
         }
 
     }
-    public void cadastrarPlanoDeSaude(Scanner scanner) {
+    public void cadastrarPlanoDeSaude(Scanner scanner)
+    {
         System.out.println("\n--- Cadastro de Novo Plano de Saúde ---");
         String nome;
         while (true) {
@@ -176,6 +191,74 @@ public class Hospital {
         this.planoDeSaude.add(novoPlano);
         System.out.println("\n--- Plano de Saúde '" + novoPlano.getNome() + "' cadastrado com sucesso! ---");
     }
+    public void agendarConsulta(Scanner scanner)
+    {
+        System.out.println("\n--- Agendamento de Nova Consulta ---");
+        String cpfPaciente = InputHandler.lerTextoNaoVazio("Digite o CPF do paciente: ", scanner);
+        Paciente pacienteEncontrado = getPaciente(cpfPaciente, this.pacientes);
+        if (pacienteEncontrado == null) {
+            System.out.println("Erro: Paciente com CPF " + cpfPaciente + " não encontrado.");
+            return;
+        }
+        String crmMedico = InputHandler.lerTextoNaoVazio("Digite o crm do medico: ", scanner);
+        Medico medicoEncontrado = getMedico(crmMedico, this.medicos);
+        if (medicoEncontrado == null) {
+            System.out.println("Erro: Médico com CRM " + crmMedico + " não encontrado.");
+            return;
+        }
+        System.out.println("Médico selecionado: " + medicoEncontrado.getNome());
+        List<Especialidade> especialidadesDoMedico = medicoEncontrado.getEspecialidades();
+        if  (especialidadesDoMedico.isEmpty()) {
+            System.out.println("Erro: O médico selecionado não tem especialidades cadastradas. ");
+            return;
+        }
+        System.out.println("\nEspecialidades do(a) Dr(a). " + medicoEncontrado.getNome());
+        Integer contador = 1;
+        for (Especialidade especial : especialidadesDoMedico) {
+            System.out.println(contador + " - Especialidade: " + especial.getNome());
+            contador++;
+        }
+        Integer escolhaesp =  InputHandler.digitarIntIntervalo("Escolha a especialidade para a consulta: "
+                , scanner
+                , 1
+                , especialidadesDoMedico.size());
+        Especialidade especialidadeescolhida = especialidadesDoMedico.get(escolhaesp - 1);
+        System.out.println("\nLocais disponíveis para consulta: ");
+        Integer contador1 = 1;
+        for(String consultorios1 : consultorios){
+            System.out.println(contador1 + " - Consulta: " + consultorios1);
+            contador1++;
+        }
+        Integer escolhaLocal = InputHandler.digitarIntIntervalo("Digite o número do lacal de consulta: ", scanner, 1, consultorios.size());
+        String LocalEscolhido = this.consultorios.get(escolhaLocal - 1);
+        LocalDateTime dataHora = InputHandler.lerDataHora("Digite a data e a hora da consulta (dessa forma: -dia/mês/ano hora:minutos-): ", scanner);
+        if (IsHorarioOcupado(medicoEncontrado, LocalEscolhido, dataHora)) {
+            return;
+        }
+        Consultas novaconsultas = new Consultas(dataHora, null, LocalEscolhido, medicoEncontrado, pacienteEncontrado, StatusConsulta.AGENDADO, especialidadeescolhida);
+        this.consultas.add(novaconsultas);
+        System.out.println("\n--- Consulta Agendada com Sucesso! ---");
+        System.out.println("Paciente: " + pacienteEncontrado.getNome());
+        System.out.println("Médico: " + medicoEncontrado.getNome());
+        System.out.println("Local: " + LocalEscolhido);
+        System.out.println("Data/Hora: " + dataHora.format(DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm")));
 
+    }
+
+    private boolean IsHorarioOcupado(Medico medico, String local, LocalDateTime dataHora) {
+        for (Consultas consultaExistente : this.consultas) {
+            if (consultaExistente.getDataHora().equals(dataHora)) {
+                if (consultaExistente.getMedico().equals(medico)) {
+                    System.out.println("Erro: O médico " + medico.getNome() + " já possui uma consulta neste horário.");
+                    return true;
+                }
+                if (consultaExistente.getLocal().equalsIgnoreCase(local)) {
+                    System.out.println("Erro: O local '" + local + "' já está ocupado neste horário.");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }

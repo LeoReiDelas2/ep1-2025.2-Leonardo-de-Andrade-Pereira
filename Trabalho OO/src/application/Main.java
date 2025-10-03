@@ -11,6 +11,7 @@ public class Main {
         Menus Menus = new Menus();
         Hospital hospital = new Hospital();
         Scanner sc = new Scanner(System.in);
+        hospital.carregarEspecialidadesPadrao();
         int escolha;
         do{
             escolha = Menus.exibirMenuPrincipal(sc, hospital);

@@ -1,5 +1,8 @@
 package utils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class InputHandler
@@ -99,5 +102,17 @@ public class InputHandler
             }
         }
     }
-
+    static public LocalDateTime lerDataHora(String mensagem, Scanner scanner)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        while (true) {
+            System.out.print(mensagem);
+            String texto = scanner.nextLine();
+            try {
+                return LocalDateTime.parse(texto, formatter);
+            } catch (DateTimeParseException e) {
+                System.out.println("Erro: Formato de data/hora inválido. Use o formato dia/mês/ano hora:minutos (ex: 16/10/2006 12:23).");
+            }
+        }
+    }
 }

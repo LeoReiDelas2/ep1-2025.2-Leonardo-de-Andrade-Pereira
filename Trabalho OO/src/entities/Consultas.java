@@ -16,7 +16,7 @@ public class Consultas
 
     public Consultas() {
     }
-    public Consultas(LocalDateTime dataHora, String diagnostico, String local, Medico medico, Paciente paciente, StatusConsulta statusConsulta) {
+    public Consultas(LocalDateTime dataHora, String diagnostico, String local, Medico medico, Paciente paciente, StatusConsulta statusConsulta, Especialidade especialidadeDaConsulta) {
         this.dataHora = dataHora;
         this.diagnostico = diagnostico;
         this.local = local;
