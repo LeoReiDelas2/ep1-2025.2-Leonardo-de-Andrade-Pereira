@@ -1,17 +1,14 @@
 package Services;
-
 import entities.*;
 import enums.StatusConsulta;
 import utils.InputHandler;
-
+import utils.Searcher;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 import static utils.Searcher.*;
-
 public class Hospital {
     private List<Paciente> pacientes;
     private List<Medico> medicos;
@@ -21,7 +18,6 @@ public class Hospital {
     private List<Quarto> quartos;
     private List<Especialidade> especialidades;
     private List<String> consultorios;
-
     public Hospital() {
         this.pacientes = new ArrayList<>();
         this.medicos = new ArrayList<>();
@@ -31,11 +27,13 @@ public class Hospital {
         this.quartos = new ArrayList<>();
         this.especialidades = new ArrayList<>();
         this.consultorios = new ArrayList<>();
-        this.consultorios.add("Consultório 1");
-        this.consultorios.add("Consultório 2");
-        this.consultorios.add("Consultório 3");
-        this.consultorios.add("Consultório 4");
-        this.consultorios.add("Consultório 5");
+        for (int i = 1; i <= 5; i++) {
+            this.consultorios.add("Consultório " + i);
+        }
+        for (int i = 101; i <= 110; i++)
+        {
+            this.quartos.add(new Quarto(i));
+        }
     }
     public void carregarEspecialidadesPadrao() {
         this.especialidades.add(new Especialidade("Cardiologia"));
@@ -44,7 +42,6 @@ public class Hospital {
         this.especialidades.add(new Especialidade("Clínica Geral"));
         this.especialidades.add(new Especialidade("Dermatologia"));
     }
-
     private Especialidade getOrCreateEspecialidadePorNome(String nome) {
         String nomeArrumado = nome.trim();
         for (Especialidade esp : this.especialidades) {
@@ -57,7 +54,6 @@ public class Hospital {
         this.especialidades.add(novaEspecialidade);
         return novaEspecialidade;
     }
-
     public void cadastrarMedico(Scanner scanner)
     {
         try {
@@ -137,7 +133,6 @@ public class Hospital {
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Erro: Opção de plano de saúde inválida. Tente o cadastro novamente.");
         }
-
     }
     public void cadastrarPlanoDeSaude(Scanner scanner)
     {
@@ -242,9 +237,7 @@ public class Hospital {
         System.out.println("Médico: " + medicoEncontrado.getNome());
         System.out.println("Local: " + LocalEscolhido);
         System.out.println("Data/Hora: " + dataHora.format(DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm")));
-
     }
-
     private boolean IsHorarioOcupado(Medico medico, String local, LocalDateTime dataHora) {
         for (Consultas consultaExistente : this.consultas) {
             if (consultaExistente.getDataHora().equals(dataHora)) {
@@ -260,5 +253,51 @@ public class Hospital {
         }
         return false;
     }
-
+    public void registrarInternacao(Scanner scanner)
+    {
+        System.out.println("\n--- Registrar Nova Internação ---");
+        String cpfPaciente = InputHandler.lerTextoNaoVazio("Digite o CPF do paciente que irá ser internado: ", scanner);
+        Paciente paciente = Searcher.getPaciente(cpfPaciente, this.pacientes);
+        if (paciente == null)
+        {
+            System.out.println("Erro: O Paciente não foi encontrado! ");
+            return;
+        }
+        String crmMedico = InputHandler.lerTextoNaoVazio("Digite o CRM do médico que irá ser o responsável: ", scanner);
+        Medico medico = Searcher.getMedico(crmMedico, this.medicos);
+        if (medico == null)
+        {
+            System.out.println("Erro: O Médico não foi encontrado! ");
+            return;
+        }
+        List<Quarto> quartosDisponiveis = new ArrayList<>();
+        for (Quarto quarto : this.quartos)
+        {
+            if(!quarto.isOcupado())
+            {
+                quartosDisponiveis.add(quarto);
+            }
+        }
+        if (quartosDisponiveis.isEmpty())
+        {
+            System.out.println("Erro: Não há quartos livres no momento! ");
+            return;
+        }
+        System.out.println("\nQuartos disponíveis:");
+        Integer contador = 1;
+        for (Quarto quarto : quartosDisponiveis)
+        {
+            System.out.println(contador + " - Quarto n° " + quarto.getNumero());
+            contador++;
+        }
+        Integer escolhaqua = InputHandler.digitarIntIntervalo("Digite qual será o quarto escolhido: ", scanner, 1, quartosDisponiveis.size());
+        Quarto quartoEscolhido = quartosDisponiveis.get(escolhaqua - 1);
+        quartoEscolhido.getOcupado();
+        Internacao novaInternacao = new Internacao(paciente, quartoEscolhido, medico);
+        this.internacoes.add(novaInternacao);
+        System.out.println("\n--- Internação Registrada! ---");
+        System.out.println("Paciente: " + paciente.getNome());
+        System.out.println("Medico: " + medico.getNome());
+        System.out.println("Quarto: " + quartoEscolhido.getNumero());
+    }
 }

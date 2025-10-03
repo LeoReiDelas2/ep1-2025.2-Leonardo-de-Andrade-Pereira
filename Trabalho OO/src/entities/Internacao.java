@@ -14,10 +14,9 @@ public class Internacao {
     public Internacao() {
     }
 
-    public Internacao(boolean ativa, Double custototal, LocalDateTime dataEntrada, Paciente paciente, Quarto quarto, Medico responsavel) {
-        this.ativa = ativa;
-        this.custototal = custototal;
-        this.dataEntrada = dataEntrada;
+    public Internacao(Paciente paciente, Quarto quarto, Medico responsavel) {
+        this.custototal = 0.0;
+        this.dataEntrada = LocalDateTime.now();
         this.dataSaida = null;
         this.paciente = paciente;
         this.quarto = quarto;

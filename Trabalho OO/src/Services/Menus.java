@@ -21,7 +21,7 @@ public class Menus
                 menuCadastros(scanner, hospital);
                 break;
             case 2:
-                hospital.agendarConsulta(scanner);
+                menuOperacoes(scanner, hospital);
                 break;
             case 3:
                 System.out.println("--> nadaa");
@@ -60,6 +60,33 @@ public class Menus
                     break;
             }
         }
+    }
+    public static void menuOperacoes(Scanner scanner, Hospital hospital)
+    {
+        while (true)
+        {
+            System.out.println("\n--- Menu de Operações ---");
+            System.out.println("1. Agendar consulta de Paciente");
+            System.out.println("2. Realizar uma internação");
+            System.out.println("0. Voltar ao Menu Principal");
+            System.out.println("-------------------------");
+            int escolha = InputHandler.digitarIntIntervalo("Digite a sua opção: ", scanner, 0, 3);
+            switch (escolha) {
+                case 0:
+                    return;
+                case 1:
+                    hospital.agendarConsulta(scanner);
+                    break;
+                case 2:
+                    hospital.registrarInternacao(scanner);
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+                    break;
+        }
+
+    }
+
     }
 
 }
