@@ -7,18 +7,18 @@ public class Internacao {
     private Medico responsavel;
     private LocalDateTime dataEntrada;
     private LocalDateTime dataSaida;
-    private String quarto;
+    private Quarto quarto;
     private boolean ativa;
     private Double custototal;
 
     public Internacao() {
     }
 
-    public Internacao(boolean ativa, Double custototal, LocalDateTime dataEntrada, LocalDateTime dataSaida, Paciente paciente, String quarto, Medico responsavel) {
+    public Internacao(boolean ativa, Double custototal, LocalDateTime dataEntrada, Paciente paciente, Quarto quarto, Medico responsavel) {
         this.ativa = ativa;
         this.custototal = custototal;
         this.dataEntrada = dataEntrada;
-        this.dataSaida = dataSaida;
+        this.dataSaida = null;
         this.paciente = paciente;
         this.quarto = quarto;
         this.responsavel = responsavel;
@@ -40,10 +40,6 @@ public class Internacao {
         return dataSaida;
     }
 
-    public String getQuarto() {
-        return quarto;
-    }
-
     public Medico getResponsavel() {
         return responsavel;
     }
@@ -52,7 +48,16 @@ public class Internacao {
         return custototal;
     }
 
-    public Paciente getPaciente() {
+    public Paciente getPaciente()
+    {
         return paciente;
     }
+
+    public void registrarAlta(Double custofinal)
+    {
+        this.dataSaida = LocalDateTime.now();
+        this.custototal = custofinal;
+        this.quarto.desocupar();
+    }
+
 }
