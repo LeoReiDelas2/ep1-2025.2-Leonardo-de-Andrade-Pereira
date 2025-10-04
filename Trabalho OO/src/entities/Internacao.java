@@ -1,6 +1,8 @@
 package entities;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class Internacao {
     private Paciente paciente;
@@ -58,5 +60,24 @@ public class Internacao {
         this.custototal = custofinal;
         this.quarto.desocupar();
     }
-
+    @Override
+    public String toString()
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm");
+        String dataSaidaFormatada;
+        if (dataSaida == null) {
+            dataSaidaFormatada = "Ainda Internado";
+        } else {
+            dataSaidaFormatada = dataSaida.format(formatter);
+        }
+        return "--- Resumo da Internação ---\n" +
+                "  Paciente: " + paciente.getNome() + "\n" +
+                "  Médico Resp.: " + responsavel.getNome() + "\n" +
+                "  Quarto: " + quarto.getNumero() + "\n" +
+                "  Data de Entrada: " + dataEntrada.format(formatter) + "\n" +
+                "  Data de Saída: " + dataSaidaFormatada + "\n" +
+                String.format("  Custo Total: R$ %.2f\n", custototal) +
+                "  Status: " + (isAtiva() ? "Ativa" : "Finalizada") + "\n" +
+                "----------------------------";
+    }
 }

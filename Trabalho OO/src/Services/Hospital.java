@@ -297,12 +297,22 @@ public class Hospital {
         }
         Integer escolhaqua = InputHandler.digitarIntIntervalo("Digite qual será o quarto escolhido: ", scanner, 1, quartosDisponiveis.size());
         Quarto quartoEscolhido = quartosDisponiveis.get(escolhaqua - 1);
-        quartoEscolhido.getOcupado();
+        quartoEscolhido.ocupar();
         Internacao novaInternacao = new Internacao(paciente, quartoEscolhido, medico);
         this.internacoes.add(novaInternacao);
+        paciente.adicionarInternacao(novaInternacao);
         System.out.println("\n--- Internação Registrada! ---");
         System.out.println("Paciente: " + paciente.getNome());
         System.out.println("Medico: " + medico.getNome());
         System.out.println("Quarto: " + quartoEscolhido.getNumero());
     }
+    private Internacao buscarInternacaoAtivaPorPaciente(Paciente paciente) {
+        for (Internacao internacao : this.internacoes) {
+            if (internacao.getPaciente().equals(paciente) && internacao.isAtiva()) {
+                return internacao;
+            }
+        }
+        return null;
+    }
+    
 }

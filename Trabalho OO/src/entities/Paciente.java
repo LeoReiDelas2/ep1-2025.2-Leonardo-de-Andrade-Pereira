@@ -40,6 +40,23 @@ public class Paciente {
         this.nome = nome;
     }
 
+    public void adicionarInternacao(Internacao internacao)
+    {
+        if (this.internacoes == null) {
+            this.internacoes = new ArrayList<>();
+        }
+        this.internacoes.add(internacao);
+
+    }
+
+    public List<Internacao> getInternacoes() {
+        return this.internacoes;
+    }
+
+    public void setInternacoes(List<Internacao> internacoes) {
+        this.internacoes = internacoes;
+    }
+
     @Override
     public String toString() {
         return "Nome: " + nome + "\nCPF: " + cpf + "\nIdade: " + idade;
