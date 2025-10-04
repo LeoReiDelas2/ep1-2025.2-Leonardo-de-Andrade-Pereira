@@ -103,27 +103,31 @@ public class Hospital {
             String planoSaude = scanner.nextLine();
             Paciente novoPaciente = null;
             int contador = 1;
-            if (planoSaude.equalsIgnoreCase("S")){
-                if (this.planoDeSaude.isEmpty()) {
-                    System.out.println("Não há um plano cadastrado, é necessário cadastrar um plano primeiro." +
-                            "\nO paciente será cadastrado como um paciente comum.");
-                    novoPaciente = new Paciente(nome, cpf, idade);
-                }
-                else{
-                    for (PlanoDeSaude plano : this.planoDeSaude) {
-                        System.out.println(contador + " - " + plano);
-                        contador++;
-                    }
-                    System.out.println("Digite o número do plano do paciente: ");
-                    Integer numeroPlano = scanner.nextInt();
-                    scanner.nextLine();
-                    PlanoDeSaude planoescolhido = this.planoDeSaude.get(numeroPlano-1);
-                    novoPaciente = new PacienteEspecial(nome, cpf, idade, planoescolhido);
-                }
-            }
-            else {
+            if (!planoSaude.equalsIgnoreCase("S")) {
                 novoPaciente = new Paciente(nome, cpf, idade);
+                this.pacientes.add(novoPaciente);
+                System.out.println("\n--- Paciente Cadastrado com Sucesso! ---");
+                System.out.println(novoPaciente);
+                return;
             }
+            if (this.planoDeSaude.isEmpty()) {
+                System.out.println("Não há um plano cadastrado, é necessário cadastrar um plano primeiro." +
+                        "\nO paciente será cadastrado como um paciente comum.");
+                novoPaciente = new Paciente(nome, cpf, idade);
+                this.pacientes.add(novoPaciente);
+                System.out.println("\n--- Paciente Cadastrado com Sucesso! ---");
+                System.out.println(novoPaciente);
+                return;
+            }
+            for (PlanoDeSaude plano : this.planoDeSaude) {
+                System.out.println(contador + " - " + plano.getNome());
+                contador++;
+            }
+            System.out.println("Digite o número do plano do paciente: ");
+            Integer numeroPlano = scanner.nextInt();
+            scanner.nextLine();
+            PlanoDeSaude planoescolhido = this.planoDeSaude.get(numeroPlano-1);
+            novoPaciente = new PacienteEspecial(nome, cpf, idade, planoescolhido);
             this.pacientes.add(novoPaciente);
             System.out.println("\n--- Paciente Cadastrado com Sucesso! ---");
             System.out.println(novoPaciente);
@@ -240,15 +244,16 @@ public class Hospital {
     }
     private boolean IsHorarioOcupado(Medico medico, String local, LocalDateTime dataHora) {
         for (Consultas consultaExistente : this.consultas) {
-            if (consultaExistente.getDataHora().equals(dataHora)) {
-                if (consultaExistente.getMedico().equals(medico)) {
-                    System.out.println("Erro: O médico " + medico.getNome() + " já possui uma consulta neste horário.");
-                    return true;
-                }
-                if (consultaExistente.getLocal().equalsIgnoreCase(local)) {
-                    System.out.println("Erro: O local '" + local + "' já está ocupado neste horário.");
-                    return true;
-                }
+            if (!consultaExistente.getDataHora().equals(dataHora)) {
+                return false;
+            }
+            if (consultaExistente.getMedico().equals(medico)) {
+                System.out.println("Erro: O médico " + medico.getNome() + " já possui uma consulta neste horário.");
+                return true;
+            }
+            if (consultaExistente.getLocal().equalsIgnoreCase(local)) {
+                System.out.println("Erro: O local '" + local + "' já está ocupado neste horário.");
+                return true;
             }
         }
         return false;
