@@ -1,6 +1,7 @@
 package Services;
 import entities.*;
 import enums.StatusConsulta;
+import utils.Arquivos;
 import utils.InputHandler;
 import utils.Searcher;
 import java.time.LocalDateTime;
@@ -12,10 +13,10 @@ import java.util.Scanner;
 import static utils.Searcher.*;
 public class Hospital
 {
-    private List<Paciente> pacientes;
-    private List<Medico> medicos;
-    private List<Consultas> consultas;
-    private List<Internacao> internacoes;
+    private static List<Paciente> pacientes;
+    private static List<Medico> medicos;
+    private static List<Consultas> consultas;
+    private static List<Internacao> internacoes;
     private List<PlanoDeSaude> planoDeSaude;
     private List<Quarto> quartos;
     private List<Especialidade> especialidades;
@@ -37,6 +38,26 @@ public class Hospital
         for (int i = 101; i <= 110; i++) {
             this.quartos.add(new Quarto(i));
         }
+    }
+
+    public static List<Medico> getMedicos() {
+        return medicos;
+    }
+
+    public static List<Paciente> getPacientes() {
+        return pacientes;
+    }
+
+    public static List<Consultas> getHistoricu() {
+        return consultas;
+    }
+
+    public static void setPacientes(List<Paciente> pacientes) {
+        Hospital.pacientes = pacientes;
+    }
+
+    public static List<Internacao> getInternacoes() {
+        return internacoes;
     }
 
     public void carregarEspecialidadesPadrao() {
@@ -110,6 +131,7 @@ public class Hospital
             int contador = 1;
             if (!planoSaude.equalsIgnoreCase("S")) {
                 novoPaciente = new Paciente(nome, cpf, idade);
+                Arquivos.SalvarPaciente(novoPaciente);
                 this.pacientes.add(novoPaciente);
                 System.out.println("\n--- Paciente Cadastrado com Sucesso! ---");
                 System.out.println(novoPaciente);
@@ -119,6 +141,7 @@ public class Hospital
                 System.out.println("Não há um plano cadastrado, é necessário cadastrar um plano primeiro." +
                         "\nO paciente será cadastrado como um paciente comum.");
                 novoPaciente = new Paciente(nome, cpf, idade);
+                Arquivos.SalvarPaciente(novoPaciente);
                 this.pacientes.add(novoPaciente);
                 System.out.println("\n--- Paciente Cadastrado com Sucesso! ---");
                 System.out.println(novoPaciente);
@@ -136,6 +159,7 @@ public class Hospital
             this.pacientes.add(novoPaciente);
             System.out.println("\n--- Paciente Cadastrado com Sucesso! ---");
             System.out.println(novoPaciente);
+            Arquivos.SalvarPaciente(novoPaciente);
         } catch (java.util.InputMismatchException e) {
             System.out.println("Erro: Entrada inválida. A idade deve ser um número.");
             scanner.nextLine();
@@ -306,13 +330,24 @@ public class Hospital
         System.out.println("Medico: " + medico.getNome());
         System.out.println("Quarto: " + quartoEscolhido.getNumero());
     }
-    private Internacao buscarInternacaoAtivaPorPaciente(Paciente paciente) {
-        for (Internacao internacao : this.internacoes) {
+    public static Internacao buscarInternacaoAtivaPorPaciente(Paciente paciente) {
+        for (Internacao internacao : Hospital.getInternacoes()) {
             if (internacao.getPaciente().equals(paciente) && internacao.isAtiva()) {
                 return internacao;
             }
         }
         return null;
+    }
+    //codigo foda
+    public static List<Internacao> buscarInternacaoAtivaPorPaciente(String cpf) {
+        List<Internacao> internacoes = new ArrayList<>();
+        Paciente paciente = Searcher.getPaciente(cpf, Hospital.getPacientes());
+        for (Internacao internacao : Hospital.getInternacoes()) {
+            if (internacao.getPaciente().equals(paciente)) {
+                internacoes.add(internacao);
+            }
+        }
+        return internacoes;
     }
     public void registrarAltoOficial(Scanner scanner) {
         System.out.println("\n--- Registrar Alta de Paciente ---");

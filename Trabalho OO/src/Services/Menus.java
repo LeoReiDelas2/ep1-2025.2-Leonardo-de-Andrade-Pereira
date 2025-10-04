@@ -1,5 +1,6 @@
 package Services;
 
+import entities.Paciente;
 import utils.InputHandler;
 
 import java.util.Scanner;
@@ -25,6 +26,12 @@ public class Menus
                 break;
             case 3:
                 System.out.println("--> nadaa");
+                //
+                for ( Paciente paciente : hospital.getPacientes())
+                {
+                    System.out.println(paciente);
+                }
+                 //
                 break;
             case 0:
                 break;
