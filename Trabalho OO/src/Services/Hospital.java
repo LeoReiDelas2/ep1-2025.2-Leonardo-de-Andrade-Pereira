@@ -371,7 +371,7 @@ public class Hospital
         }
         return null;
     }
-    public void concluirConsultaInterativo(Scanner scanner) {
+    public void concluirConsulta(Scanner scanner) {
         System.out.println("\n--- Concluir Consulta ---");
         Paciente paciente = Searcher.getPaciente(InputHandler.lerTextoNaoVazio("Digite o CPF do paciente: ", scanner), this.pacientes);
         if (paciente == null) {
@@ -413,7 +413,7 @@ public class Hospital
             return custoBase;
         }
     }
-    public void cancelarConsultaInterativo(Scanner scanner) {
+    public void cancelarConsulta(Scanner scanner) {
         System.out.println("\n--- Cancelar Consulta Agendada ---");
         Paciente paciente = Searcher.getPaciente(InputHandler.lerTextoNaoVazio("Digite o CPF do paciente: ", scanner), this.pacientes);
         if (paciente == null) {
