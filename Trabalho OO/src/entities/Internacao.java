@@ -3,6 +3,7 @@ package entities;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Scanner;
 
 public class Internacao {
     private Paciente paciente;
@@ -60,6 +61,11 @@ public class Internacao {
         this.custototal = custofinal;
         this.quarto.desocupar();
     }
+
+    public Quarto getQuarto() {
+        return quarto;
+    }
+
     @Override
     public String toString()
     {

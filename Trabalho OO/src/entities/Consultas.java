@@ -30,6 +30,18 @@ public class Consultas
         return dataHora;
     }
 
+    public void setDiagnostico(String diagnostico) {
+        this.diagnostico = diagnostico;
+    }
+
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
+
     public String getDiagnostico() {
         return diagnostico;
     }
@@ -38,8 +50,8 @@ public class Consultas
         return local;
     }
 
-    public String getMedico() {
-        return medico.getNome();
+    public Medico getMedico() {
+        return medico;
     }
     public Especialidade getEspecialidadeDaConsulta() {
         return especialidadeDaConsulta;

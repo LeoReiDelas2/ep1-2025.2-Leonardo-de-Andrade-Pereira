@@ -8,4 +8,12 @@ public class PacienteEspecial extends Paciente
         super(nome, cpf, idade);
         this.planoDeSaude = planoDeSaude;
     }
+
+    public PlanoDeSaude getPlanoDeSaude() {
+        return planoDeSaude;
+    }
+
+    public void setPlanoDeSaude(PlanoDeSaude planoDeSaude) {
+        this.planoDeSaude = planoDeSaude;
+    }
 }

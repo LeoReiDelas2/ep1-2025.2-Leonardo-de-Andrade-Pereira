@@ -68,9 +68,11 @@ public class Menus
             System.out.println("\n--- Menu de Operações ---");
             System.out.println("1. Agendar consulta de Paciente");
             System.out.println("2. Realizar uma internação");
+            System.out.println("3. Registrar Alta de Paciente");
+            System.out.println("4. Cancelar internação");
             System.out.println("0. Voltar ao Menu Principal");
             System.out.println("-------------------------");
-            int escolha = InputHandler.digitarIntIntervalo("Digite a sua opção: ", scanner, 0, 3);
+            int escolha = InputHandler.digitarIntIntervalo("Digite a sua opção: ", scanner, 0, 4);
             switch (escolha) {
                 case 0:
                     return;
@@ -79,6 +81,12 @@ public class Menus
                     break;
                 case 2:
                     hospital.registrarInternacao(scanner);
+                    break;
+                case 3:
+                    hospital.registrarAltoOficial(scanner);
+                    break;
+                case 4:
+                    hospital.cancelarInternacao(scanner);
                     break;
                 default:
                     System.out.println("Opção inválida.");

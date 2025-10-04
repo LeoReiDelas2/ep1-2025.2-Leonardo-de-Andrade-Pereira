@@ -5,11 +5,13 @@ import utils.InputHandler;
 import utils.Searcher;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import static utils.Searcher.*;
-public class Hospital {
+public class Hospital
+{
     private List<Paciente> pacientes;
     private List<Medico> medicos;
     private List<Consultas> consultas;
@@ -18,6 +20,8 @@ public class Hospital {
     private List<Quarto> quartos;
     private List<Especialidade> especialidades;
     private List<String> consultorios;
+    private static final Double Fator_desconto_idoso = 0.80;
+
     public Hospital() {
         this.pacientes = new ArrayList<>();
         this.medicos = new ArrayList<>();
@@ -30,11 +34,11 @@ public class Hospital {
         for (int i = 1; i <= 5; i++) {
             this.consultorios.add("Consultório " + i);
         }
-        for (int i = 101; i <= 110; i++)
-        {
+        for (int i = 101; i <= 110; i++) {
             this.quartos.add(new Quarto(i));
         }
     }
+
     public void carregarEspecialidadesPadrao() {
         this.especialidades.add(new Especialidade("Cardiologia"));
         this.especialidades.add(new Especialidade("Pediatria"));
@@ -42,6 +46,7 @@ public class Hospital {
         this.especialidades.add(new Especialidade("Clínica Geral"));
         this.especialidades.add(new Especialidade("Dermatologia"));
     }
+
     private Especialidade getOrCreateEspecialidadePorNome(String nome) {
         String nomeArrumado = nome.trim();
         for (Especialidade esp : this.especialidades) {
@@ -54,8 +59,8 @@ public class Hospital {
         this.especialidades.add(novaEspecialidade);
         return novaEspecialidade;
     }
-    public void cadastrarMedico(Scanner scanner)
-    {
+
+    public void cadastrarMedico(Scanner scanner) {
         try {
             System.out.println("\n--- Cadastro de Novo Médico ---");
             System.out.print("Digite o nome do médico: ");
@@ -88,8 +93,8 @@ public class Hospital {
             scanner.nextLine();
         }
     }
-    public void cadastrarPaciente(Scanner scanner)
-    {
+
+    public void cadastrarPaciente(Scanner scanner) {
         try {
             System.out.println("\n--- Cadastro de Novo Paciente ---");
             System.out.print("Digite o nome do paciente: ");
@@ -126,7 +131,7 @@ public class Hospital {
             System.out.println("Digite o número do plano do paciente: ");
             Integer numeroPlano = scanner.nextInt();
             scanner.nextLine();
-            PlanoDeSaude planoescolhido = this.planoDeSaude.get(numeroPlano-1);
+            PlanoDeSaude planoescolhido = this.planoDeSaude.get(numeroPlano - 1);
             novoPaciente = new PacienteEspecial(nome, cpf, idade, planoescolhido);
             this.pacientes.add(novoPaciente);
             System.out.println("\n--- Paciente Cadastrado com Sucesso! ---");
@@ -138,8 +143,8 @@ public class Hospital {
             System.out.println("Erro: Opção de plano de saúde inválida. Tente o cadastro novamente.");
         }
     }
-    public void cadastrarPlanoDeSaude(Scanner scanner)
-    {
+
+    public void cadastrarPlanoDeSaude(Scanner scanner) {
         System.out.println("\n--- Cadastro de Novo Plano de Saúde ---");
         String nome;
         while (true) {
@@ -190,8 +195,8 @@ public class Hospital {
         this.planoDeSaude.add(novoPlano);
         System.out.println("\n--- Plano de Saúde '" + novoPlano.getNome() + "' cadastrado com sucesso! ---");
     }
-    public void agendarConsulta(Scanner scanner)
-    {
+
+    public void agendarConsulta(Scanner scanner) {
         System.out.println("\n--- Agendamento de Nova Consulta ---");
         String cpfPaciente = InputHandler.lerTextoNaoVazio("Digite o CPF do paciente: ", scanner);
         Paciente pacienteEncontrado = getPaciente(cpfPaciente, this.pacientes);
@@ -200,14 +205,14 @@ public class Hospital {
             return;
         }
         String crmMedico = InputHandler.lerTextoNaoVazio("Digite o crm do medico: ", scanner);
-        Medico medicoEncontrado = getMedico(crmMedico, this.medicos);
+        Medico medicoEncontrado = getMedicoBusca(crmMedico, this.medicos);
         if (medicoEncontrado == null) {
             System.out.println("Erro: Médico com CRM " + crmMedico + " não encontrado.");
             return;
         }
         System.out.println("Médico selecionado: " + medicoEncontrado.getNome());
         List<Especialidade> especialidadesDoMedico = medicoEncontrado.getEspecialidades();
-        if  (especialidadesDoMedico.isEmpty()) {
+        if (especialidadesDoMedico.isEmpty()) {
             System.out.println("Erro: O médico selecionado não tem especialidades cadastradas. ");
             return;
         }
@@ -217,14 +222,14 @@ public class Hospital {
             System.out.println(contador + " - Especialidade: " + especial.getNome());
             contador++;
         }
-        Integer escolhaesp =  InputHandler.digitarIntIntervalo("Escolha a especialidade para a consulta: "
+        Integer escolhaesp = InputHandler.digitarIntIntervalo("Escolha a especialidade para a consulta: "
                 , scanner
                 , 1
                 , especialidadesDoMedico.size());
         Especialidade especialidadeescolhida = especialidadesDoMedico.get(escolhaesp - 1);
         System.out.println("\nLocais disponíveis para consulta: ");
         Integer contador1 = 1;
-        for(String consultorios1 : consultorios){
+        for (String consultorios1 : consultorios) {
             System.out.println(contador1 + " - Consulta: " + consultorios1);
             contador1++;
         }
@@ -242,6 +247,7 @@ public class Hospital {
         System.out.println("Local: " + LocalEscolhido);
         System.out.println("Data/Hora: " + dataHora.format(DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm")));
     }
+
     private boolean IsHorarioOcupado(Medico medico, String local, LocalDateTime dataHora) {
         for (Consultas consultaExistente : this.consultas) {
             if (!consultaExistente.getDataHora().equals(dataHora)) {
@@ -258,40 +264,34 @@ public class Hospital {
         }
         return false;
     }
-    public void registrarInternacao(Scanner scanner)
-    {
+
+    public void registrarInternacao(Scanner scanner) {
         System.out.println("\n--- Registrar Nova Internação ---");
         String cpfPaciente = InputHandler.lerTextoNaoVazio("Digite o CPF do paciente que irá ser internado: ", scanner);
         Paciente paciente = Searcher.getPaciente(cpfPaciente, this.pacientes);
-        if (paciente == null)
-        {
+        if (paciente == null) {
             System.out.println("Erro: O Paciente não foi encontrado! ");
             return;
         }
         String crmMedico = InputHandler.lerTextoNaoVazio("Digite o CRM do médico que irá ser o responsável: ", scanner);
-        Medico medico = Searcher.getMedico(crmMedico, this.medicos);
-        if (medico == null)
-        {
+        Medico medico = Searcher.getMedicoBusca(crmMedico, this.medicos);
+        if (medico == null) {
             System.out.println("Erro: O Médico não foi encontrado! ");
             return;
         }
         List<Quarto> quartosDisponiveis = new ArrayList<>();
-        for (Quarto quarto : this.quartos)
-        {
-            if(!quarto.isOcupado())
-            {
+        for (Quarto quarto : this.quartos) {
+            if (!quarto.isOcupado()) {
                 quartosDisponiveis.add(quarto);
             }
         }
-        if (quartosDisponiveis.isEmpty())
-        {
+        if (quartosDisponiveis.isEmpty()) {
             System.out.println("Erro: Não há quartos livres no momento! ");
             return;
         }
         System.out.println("\nQuartos disponíveis:");
         Integer contador = 1;
-        for (Quarto quarto : quartosDisponiveis)
-        {
+        for (Quarto quarto : quartosDisponiveis) {
             System.out.println(contador + " - Quarto n° " + quarto.getNumero());
             contador++;
         }
@@ -314,5 +314,124 @@ public class Hospital {
         }
         return null;
     }
-    
+    public void registrarAltoOficial(Scanner scanner) {
+        System.out.println("\n--- Registrar Alta de Paciente ---");
+        String cpf = InputHandler.lerTextoNaoVazio("Digite o CPF do paciente que receberá alta: ", scanner);
+        Paciente paciente = Searcher.getPaciente(cpf, this.pacientes);
+        if (paciente == null) {
+            System.out.println("Erro: Paciente não encontrado.");
+            return;
+        }
+        Internacao internacao = buscarInternacaoAtivaPorPaciente(paciente);
+        if (internacao == null) {
+            System.out.println("Erro: Este paciente não possui uma internação ativa.");
+            return;
+        }
+        long diasInternado = ChronoUnit.DAYS.between(internacao.getDataEntrada(), LocalDateTime.now());
+        if (diasInternado == 0) diasInternado = 1;
+        double custoTotal = diasInternado * 500.0;
+        System.out.println("Paciente: " + paciente.getNome());
+        System.out.printf("Custo total da internação: R$ %.2f\n", custoTotal);
+        boolean confirmar = InputHandler.lerSimNao("Confirmar alta e liberar o quarto " + internacao.getQuarto().getNumero() + "? (S/N): ", scanner);
+        if (confirmar) {
+            internacao.registrarAlta(custoTotal);
+            System.out.println("Alta registrada e quarto liberado com sucesso!");
+        } else {
+            System.out.println("Operação cancelada.");
+        }
+    }
+    public void cancelarInternacao(Scanner scanner) {
+        System.out.println("\n--- Cancelar Internação Ativa ---");
+        String cpf = InputHandler.lerTextoNaoVazio("Digite o CPF do paciente: ", scanner);
+        Paciente paciente = Searcher.getPaciente(cpf, this.pacientes);
+        if (paciente == null) {
+            System.out.println("Erro: Paciente não encontrado.");
+            return;
+        }
+        Internacao internacao = buscarInternacaoAtivaPorPaciente(paciente);
+        if (internacao == null) {
+            System.out.println("Erro: Este paciente não possui uma internação ativa para cancelar.");
+            return;
+        }
+        boolean confirmar = InputHandler.lerSimNao("Confirmar o CANCELAMENTO da internação no quarto " + internacao.getQuarto().getNumero() + "? (S/N): ", scanner);
+        if (confirmar) {
+            internacao.getQuarto().desocupar();
+            this.internacoes.remove(internacao);
+            paciente.getInternacoes().remove(internacao);
+            System.out.println("Internação cancelada e quarto liberado com sucesso!");
+        } else {
+            System.out.println("Operação cancelada.");
+        }
+    }
+    private Consultas buscarConsultaAgendadaPorPaciente(Paciente paciente) {
+        for (Consultas consulta : this.consultas) {
+            if (consulta.getPaciente().equals(paciente) && consulta.getStatusConsulta() == StatusConsulta.AGENDADO) {
+                return consulta;
+            }
+        }
+        return null;
+    }
+    public void concluirConsultaInterativo(Scanner scanner) {
+        System.out.println("\n--- Concluir Consulta ---");
+        Paciente paciente = Searcher.getPaciente(InputHandler.lerTextoNaoVazio("Digite o CPF do paciente: ", scanner), this.pacientes);
+        if (paciente == null) {
+            System.out.println("Erro: Paciente não encontrado.");
+            return;
+        }
+        Consultas consulta = buscarConsultaAgendadaPorPaciente(paciente);
+        if (consulta == null) {
+            System.out.println("Erro: Nenhuma consulta agendada encontrada para este paciente.");
+            return;
+        }
+        System.out.println("Consulta encontrada: Dr(a). " + consulta.getMedico().getNome() + " em " + consulta.getDataHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        String diagnostico = InputHandler.lerTextoNaoVazio("Digite o diagnóstico/prescrição da consulta: ", scanner);
+
+        consulta.setDiagnostico(diagnostico);
+        consulta.setStatusConsulta(StatusConsulta.CONCLUIDO);
+        double custoFinal = calcularCustoConsulta(consulta);
+        System.out.println("\n--- Consulta Concluída com Sucesso! ---");
+        System.out.println("Diagnóstico: " + diagnostico);
+        System.out.printf("Valor final a ser pago: R$ %.2f\n", custoFinal);
+    }
+    public double calcularCustoConsulta(Consultas consulta) {
+        Paciente paciente = consulta.getPaciente();
+        Medico medico = consulta.getMedico();
+        double custoBase = medico.getCustoDaConsulta();
+        if (paciente instanceof PacienteEspecial) {
+            System.out.println("-> Aplicando desconto de Plano de Saúde...");
+            PacienteEspecial pacienteEspecial = (PacienteEspecial) paciente;
+            PlanoDeSaude plano = pacienteEspecial.getPlanoDeSaude();
+            double descontoDoPlano = plano.getDescontoPara(consulta.getEspecialidadeDaConsulta());
+            double valorFinal = custoBase * (1.0 - descontoDoPlano);
+            plano.registrarEconomia(custoBase - valorFinal);
+            return valorFinal;
+        } else if (paciente.getIdade() >= 60) {
+            System.out.println("-> Aplicando desconto para maiores de 60 anos...");
+            return custoBase * Fator_desconto_idoso;
+        } else {
+            System.out.println("-> Aplicando custo padrão (sem descontos).");
+            return custoBase;
+        }
+    }
+    public void cancelarConsultaInterativo(Scanner scanner) {
+        System.out.println("\n--- Cancelar Consulta Agendada ---");
+        Paciente paciente = Searcher.getPaciente(InputHandler.lerTextoNaoVazio("Digite o CPF do paciente: ", scanner), this.pacientes);
+        if (paciente == null) {
+            System.out.println("Erro: Paciente não encontrado.");
+            return;
+        }
+        Consultas consulta = buscarConsultaAgendadaPorPaciente(paciente);
+        if (consulta == null) {
+            System.out.println("Erro: Nenhuma consulta agendada encontrada para este paciente.");
+            return;
+        }
+        System.out.println("Consulta encontrada: Dr(a). " + consulta.getMedico().getNome() + " em " + consulta.getDataHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        boolean confirmar = InputHandler.lerSimNao("Confirmar o cancelamento desta consulta? (S/N): ", scanner);
+        if (confirmar) {
+            consulta.setStatusConsulta(StatusConsulta.CANCELADO);
+            System.out.println("Consulta cancelada com sucesso.");
+        } else {
+            System.out.println("Operação cancelada.");
+        }
+    }
 }
