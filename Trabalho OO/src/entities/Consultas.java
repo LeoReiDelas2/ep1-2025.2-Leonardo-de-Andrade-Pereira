@@ -1,9 +1,11 @@
 package entities;
 
 import enums.StatusConsulta;
+import utils.Searcher;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class Consultas
 {
@@ -66,12 +68,70 @@ public class Consultas
         this.statusConsulta = statusConsulta;
     }
     public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm");
+        String diagnosticoStr = (this.diagnostico == null || this.diagnostico.isBlank())
+                ? "Não registrado"
+                : this.diagnostico;
+        String statusStr;
+        switch (this.statusConsulta) {
+            case AGENDADO:
+                statusStr = "Agendado";
+                break;
+            case CONCLUIDO:
+                statusStr = "Concluído";
+                break;
+            case CANCELADO:
+                statusStr = "Cancelado";
+                break;
+            default:
+                statusStr = this.statusConsulta.name();
+        }
+        return "--- Informações da Consulta ---\n" +
+                "  Paciente: " + this.paciente.getNome() + "\n" +
+                "  Médico: Dr(a). " + this.medico.getNome() + "\n" +
+                "  Especialidade: " + this.especialidadeDaConsulta.getNome() + "\n" +
+                "  Data/Hora: " + this.dataHora.format(formatter) + "\n" +
+                "  Local: " + this.local + "\n" +
+                "  Status: " + statusStr + "\n" +
+                "  Diagnóstico: " + diagnosticoStr + "\n" +
+                "--------------------------------";
+    }
+    public static Consultas fromString(String linha, List<Paciente> todosOsPacientes, List<Medico> todosOsMedicos, List<Especialidade> todasAsEspecialidades) {
+        try {
+            String[] dados = linha.split(";", -1);
+            String pacienteCpf = dados[0];
+            String medicoCrm = dados[1];
+            String nomeEspecialidade = dados[5];
+            Paciente paciente = Searcher.getPaciente(pacienteCpf, todosOsPacientes);
+            Medico medico = Searcher.getMedicoBusca(medicoCrm, todosOsMedicos);
+            Especialidade especialidade = Searcher.buscarEspecialidadePorNome(nomeEspecialidade, todasAsEspecialidades);
+            if (paciente == null || medico == null || especialidade == null) {
+                System.err.println("Aviso: Não foi possível reconectar a consulta, dados faltando. Linha: " + linha);
+                return null;
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
+            LocalDateTime dataHora = LocalDateTime.parse(dados[2], formatter);
+            String local = dados[3];
+            StatusConsulta status = StatusConsulta.valueOf(dados[4]);
+            String diagnostico = dados[6];
+            Consultas consulta = new Consultas(dataHora, null, local, medico, paciente,status, especialidade);
+            consulta.setDiagnostico(diagnostico.isBlank() ? null : diagnostico);
+            return consulta;
+        } catch (Exception e) {
+            System.err.println("Erro ao converter linha para Consulta: " + linha + " | Erro: " + e.getMessage());
+            return null;
+        }
+    }
+    public String objectToString()
+    {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
-        String diagnosticoStr = (this.diagnostico == null) ? "" : this.diagnostico;
+        String dataFormatada = this.dataHora.format(formatter);
+        String diagnosticoStr = (this.diagnostico == null || this.diagnostico.isBlank()) ? "" : this.diagnostico;
+
         return String.join(";",
                 this.paciente.getCpf(),
                 this.medico.getCrm(),
-                this.dataHora.format(formatter),
+                dataFormatada,
                 this.local,
                 this.statusConsulta.name(),
                 this.especialidadeDaConsulta.getNome(),

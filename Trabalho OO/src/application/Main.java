@@ -14,6 +14,8 @@ public class Main {
         hospital.carregarEspecialidadesPadrao();
         Arquivos.carregarPacientes();
         Arquivos.carregarMedicos();
+        Arquivos.carregarConsultas();
+        Arquivos.carregarInternacoes();
         int escolha;
         do{
             escolha = Menus.exibirMenuPrincipal(sc, hospital);

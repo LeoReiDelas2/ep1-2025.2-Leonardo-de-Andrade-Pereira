@@ -40,6 +40,42 @@ public class Hospital
         }
     }
 
+    public void setConsultorios(List<String> consultorios) {
+        this.consultorios = consultorios;
+    }
+
+    public static void setInternacoes(List<Internacao> internacoes) {
+        Hospital.internacoes = internacoes;
+    }
+
+    public void setPlanoDeSaude(List<PlanoDeSaude> planoDeSaude) {
+        this.planoDeSaude = planoDeSaude;
+    }
+
+    public void setQuartos(List<Quarto> quartos) {
+        this.quartos = quartos;
+    }
+
+    public static void setConsultas(List<Consultas> consultas) {
+        Hospital.consultas = consultas;
+    }
+
+    public static List<Consultas> getConsultas() {
+        return consultas;
+    }
+
+    public List<String> getConsultorios() {
+        return consultorios;
+    }
+
+    public List<PlanoDeSaude> getPlanoDeSaude() {
+        return planoDeSaude;
+    }
+
+    public List<Quarto> getQuartos() {
+        return quartos;
+    }
+
     public static List<Medico> getMedicos() {
         return medicos;
     }
@@ -286,6 +322,7 @@ public class Hospital
         this.consultas.add(novaconsultas);
         medicoEncontrado.adicionarAgendaOcupada(dataHora);
         Arquivos.SalvarMedico(medicoEncontrado);
+        Arquivos.SalvarConsulta(novaconsultas);
         System.out.println("\n--- Consulta Agendada com Sucesso! ---");
         System.out.println("Paciente: " + pacienteEncontrado.getNome());
         System.out.println("Médico: " + medicoEncontrado.getNome());
@@ -344,6 +381,7 @@ public class Hospital
         Quarto quartoEscolhido = quartosDisponiveis.get(escolhaqua - 1);
         quartoEscolhido.ocupar();
         Internacao novaInternacao = new Internacao(paciente, quartoEscolhido, medico);
+        Arquivos.SalvarInternacao(novaInternacao);
         this.internacoes.add(novaInternacao);
         paciente.adicionarInternacao(novaInternacao);
         System.out.println("\n--- Internação Registrada! ---");
@@ -490,4 +528,5 @@ public class Hospital
             System.out.println("Operação cancelada.");
         }
     }
+
 }

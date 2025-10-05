@@ -1,11 +1,10 @@
 package utils;
 
 import Services.Hospital;
-import entities.Medico;
-import entities.Paciente;
-import entities.PacienteEspecial;
+import entities.*;
 
 import java.io.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,5 +89,74 @@ public class Arquivos
             medicos.add(medico);
         }
         Hospital.setMedicos(medicos);
+    }
+    public static void SalvarConsulta(Consultas consulta)
+    {
+        String cpf = consulta.getPaciente().getCpf();
+        String crm = consulta.getMedico().getCrm();
+        String dataFormatada = consulta.getDataHora()
+                .format(java.time.format.DateTimeFormatter.ofPattern("ddMMyyyyHHmm"));
+        String nomeArquivo = cpf + "_" + crm + "_" + dataFormatada + "consulta";
+        String dados = consulta.objectToString();
+        SalvarArquivo("consultas", nomeArquivo + "consulta", dados);
+    }
+    public static void carregarConsultas()
+    {
+        List<String> consultasarquivos = carregarArquivos("consultas", "consulta.txt");
+        if (consultasarquivos == null)
+        {
+            return;
+        }
+        List<Paciente> todosPacientes = Hospital.getPacientes();
+        List<Medico> todosMedicos = Hospital.getMedicos();
+        List<Especialidade> todasEspecialidades = Hospital.getEspecialidades();
+        List<Consultas> consultas = new ArrayList<>();
+        for (String consultaarquivo : consultasarquivos)
+        {
+            Consultas consulta = Consultas.fromString(
+                    consultaarquivo,
+                    todosPacientes,
+                    todosMedicos,
+                    todasEspecialidades
+            );
+            if (consulta != null) {
+                consultas.add(consulta);
+            }
+        }
+        Hospital.setConsultas(consultas);
+    }
+    public static void SalvarInternacao(Internacao internacao)
+    {
+        String cpf = internacao.getPaciente().getCpf();
+        String crm = internacao.getResponsavel().getCrm();
+        String dataFormatada = internacao.getDataEntrada()
+                .format(java.time.format.DateTimeFormatter.ofPattern("ddMMyyyyHHmm"));
+        String nomeArquivo = cpf + "_" + crm + "_" + dataFormatada + "internacao";
+        String dados = internacao.objectToString();
+        SalvarArquivo("internacoes", nomeArquivo, dados);
+    }
+    public static void carregarInternacoes()
+    {
+        List<String> internacoesarquivos = carregarArquivos("internacoes", "internacao.txt");
+        if (internacoesarquivos == null)
+        {
+            return;
+        }
+        List<Paciente> todosPacientes = Hospital.getPacientes();
+        List<Medico> todosMedicos = Hospital.getMedicos();
+        List<Internacao> internacoes = new ArrayList<>();
+        for (String internacaoarquivo : internacoesarquivos)
+        {
+            Internacao internacao = Internacao.fromString(
+                    internacaoarquivo,
+                    todosPacientes,
+                    todosMedicos
+            );
+            if (internacao != null) {
+                internacoes.add(internacao);
+                internacao.getPaciente().adicionarInternacao(internacao);
+            }
+        }
+        Hospital.setInternacoes(internacoes);
     }
 }

@@ -1,5 +1,7 @@
 package Services;
 
+import entities.Consultas;
+import entities.Internacao;
 import entities.Medico;
 import entities.Paciente;
 import utils.InputHandler;
@@ -36,6 +38,18 @@ public class Menus
                 for ( Medico medico : hospital.getMedicos())
                 {
                     System.out.println(medico);
+                }
+                //
+                //
+                for (Consultas consulta : hospital.getConsultas())
+                {
+                    System.out.println(consulta);
+                }
+                //
+                //
+                for (Internacao internacao : hospital.getInternacoes())
+                {
+                    System.out.println(internacao);
                 }
                 //
                 break;

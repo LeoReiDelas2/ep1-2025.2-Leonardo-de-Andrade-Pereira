@@ -56,5 +56,25 @@ public class PlanoDeSaude
     public double getDescontoPara(Especialidade especialidade) {
         return this.coberturaDescontos.getOrDefault(especialidade, 0.0);
     }
-
+    @Override
+    public String toString() {
+        StringBuilder coberturas = new StringBuilder();
+        if (coberturaDescontos != null && !coberturaDescontos.isEmpty()) {
+            for (Map.Entry<Especialidade, Double> entry : coberturaDescontos.entrySet()) {
+                coberturas.append("\n    - ")
+                        .append(entry.getKey().getNome())
+                        .append(": ")
+                        .append(String.format("%.0f%%", entry.getValue() * 100))
+                        .append(" de desconto");
+            }
+        } else {
+            coberturas.append("\n    Nenhuma cobertura cadastrada");
+        }
+        return "--- Plano de Saúde ---\n" +
+                "  Nome: " + nome + "\n" +
+                "  Tipo: " + (especial ? "Especial (Internação Curta Gratuita)" : "Padrão") + "\n" +
+                String.format("  Economia Total: R$ %.2f\n", economia) +
+                "  Coberturas:" + coberturas.toString() + "\n" +
+                "----------------------";
+    }
 }

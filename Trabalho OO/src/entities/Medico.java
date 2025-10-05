@@ -134,16 +134,24 @@ public class Medico {
     }
     @Override
     public String toString() {
-        for (Especialidade especialidade : especialidades)
-        {
-            System.out.println(especialidade.getNome());
-        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
-        for (LocalDateTime horario : agendaOcupada)
-        {
-            System.out.println(horario.format(formatter));
+        StringBuilder especialidadesStr = new StringBuilder();
+        if (especialidades != null && !especialidades.isEmpty()) {
+            for (int i = 0; i < especialidades.size(); i++) {
+                especialidadesStr.append(especialidades.get(i).getNome());
+                if (i < especialidades.size() - 1) {
+                    especialidadesStr.append(", ");
+                }
+            }
+        } else {
+            especialidadesStr.append("Nenhuma");
         }
-        return "Nome: " + nome + "\nCrm: " + crm + "\nCusto da consulta: " + custoDaConsulta;
+        return "--- Informações do Médico ---\n" +
+                "  Nome: " + nome + "\n" +
+                "  CRM: " + crm + "\n" +
+                String.format("  Custo da Consulta: R$ %.2f\n", custoDaConsulta) +
+                "  Especialidades: " + especialidadesStr.toString() + "\n" +
+                "  Horários Ocupados: " + (agendaOcupada != null ? agendaOcupada.size() : 0) + "\n" +
+                "------------------------------";
     }
-
 }

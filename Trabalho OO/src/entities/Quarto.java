@@ -33,5 +33,11 @@ public class Quarto
     public void setNumero(Integer numero) {
         this.numero = numero;
     }
-
+    @Override
+    public String toString() {
+        return "--- Informações do Quarto ---\n" +
+                "  Número: " + numero + "\n" +
+                "  Status: " + (isOcupado ? "Ocupado" : "Disponível") + "\n" +
+                "-----------------------------";
+    }
 }

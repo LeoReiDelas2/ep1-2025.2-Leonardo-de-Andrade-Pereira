@@ -73,7 +73,13 @@ public class Paciente {
 
     @Override
     public String toString() {
-        return "Nome: " + nome + "\nCPF: " + cpf + "\nIdade: " + idade;
+        return "--- Informações do Paciente ---\n" +
+                "  Nome: " + nome + "\n" +
+                "  CPF: " + cpf + "\n" +
+                "  Idade: " + idade + " anos\n" +
+                "  Internações: " + (internacoes != null ? internacoes.size() : 0) + "\n" +
+                "  Consultas realizadas: " + (historico != null ? historico.size() : 0) + "\n" +
+                "--------------------------------";
     }
     public String concatenarInternacoes(List<Internacao> internacoes)
     {
@@ -85,6 +91,15 @@ public class Paciente {
         }
         return dados;
     }
+
+    public List<Consultas> getHistorico() {
+        return historico;
+    }
+
+    public void setHistorico(List<Consultas> historico) {
+        this.historico = historico;
+    }
+
     public String concaternarHistorico(List<Consultas> historico)
     {
         String dados = "";
