@@ -3,6 +3,7 @@ import Services.Hospital;
 import utils.Searcher;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ public class Medico {
     private String crm;
     private Double custoDaConsulta;
     private List<LocalDateTime> agendaOcupada;
-    private static List<Especialidade> especialidades;
+    private List<Especialidade> especialidades;
 
     public Medico(String crm, Double custoDaConsulta, String nome) {
         this.agendaOcupada = new ArrayList<>();
@@ -72,7 +73,7 @@ public class Medico {
     public List<Especialidade> getEspecialidades() {
         return especialidades;
     }
-    public static List<Especialidade> getEspecialidades1() {
+    public List<Especialidade> getEspecialidades1() {
         return especialidades;
     }
     public String objectToString()
@@ -90,13 +91,13 @@ public class Medico {
         return dados;
     }
     public String concatenarHorarios(List<LocalDateTime> horarios) {
-        StringBuilder dados = new StringBuilder();
+        String dados = "";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
         for (LocalDateTime horario : horarios) {
             String horarioFormatado = horario.format(formatter);
-            dados.append(horarioFormatado).append(" ");
+            dados += horarioFormatado + " ";
         }
-        return dados.toString().trim();
+        return dados;
     }
     public static Medico fromString(String linha) {
         try {
@@ -104,17 +105,16 @@ public class Medico {
             String nome = dados[0];
             String crm = dados[1];
             double custo = Double.parseDouble(dados[2]);
-            Medico medico = new Medico(nome, custo, crm);
+            Medico medico = new Medico(crm, custo, nome);
             if (dados.length > 3 && !dados[3].isBlank()) {
                 String[] nomesEspecialidades = dados[3].split(" ");
                 for (String nomeEsp : nomesEspecialidades) {
-                    Especialidade espEncontrada = Searcher.buscarEspecialidadePorNome(nomeEsp, getEspecialidades1());
-                    if (espEncontrada != null) {
-                        medico.adicionarEspecialidade(espEncontrada);
-                    }
+                    Especialidade especialidade = new Especialidade(nomeEsp);
+                    medico.adicionarEspecialidade(especialidade);
+                    Hospital.addEspecialidade(especialidade);
                 }
             }
-            if (dados.length > 4 && !dados[4].isBlank()) {
+            if (dados.length > 4 && !dados[4].trim().isBlank()) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
                 String[] datasString = dados[4].split(" ");
                 for (String dataStr : datasString) {
@@ -134,6 +134,16 @@ public class Medico {
     }
     @Override
     public String toString() {
+        for (Especialidade especialidade : especialidades)
+        {
+            System.out.println(especialidade.getNome());
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
+        for (LocalDateTime horario : agendaOcupada)
+        {
+            System.out.println(horario.format(formatter));
+        }
         return "Nome: " + nome + "\nCrm: " + crm + "\nCusto da consulta: " + custoDaConsulta;
     }
+
 }

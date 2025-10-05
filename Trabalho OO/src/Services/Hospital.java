@@ -19,7 +19,7 @@ public class Hospital
     private static List<Internacao> internacoes;
     private List<PlanoDeSaude> planoDeSaude;
     private List<Quarto> quartos;
-    private List<Especialidade> especialidades;
+    private static List<Especialidade> especialidades;
     private List<String> consultorios;
     private static final Double Fator_desconto_idoso = 0.80;
 
@@ -50,6 +50,20 @@ public class Hospital
 
     public static List<Consultas> getHistoricu() {
         return consultas;
+    }
+
+    public static List<Especialidade> getEspecialidades() {
+        return especialidades;
+    }
+
+    public static void setEspecialidades(List<Especialidade> especialidades) {
+        Hospital.especialidades = especialidades;
+    }
+
+    public static void addEspecialidade(Especialidade especialidade) {
+        List<Especialidade> especialidadess = Hospital.getEspecialidades();
+        especialidadess.add(especialidade);
+        Hospital.setEspecialidades(especialidadess);
     }
 
     public static void setPacientes(List<Paciente> pacientes) {
@@ -99,7 +113,7 @@ public class Hospital
             System.out.println("\n--- Adicionar Especialidades ---");
             while (true) {
                 System.out.print("Digite o nome de uma especialidade para adicionar (ou digite 'fim' para terminar): ");
-                String nomeEspecialidade = scanner.nextLine();
+                String nomeEspecialidade = scanner.nextLine().trim();
                 if (nomeEspecialidade.equalsIgnoreCase("fim")) {
                     break;
                 }
@@ -262,7 +276,7 @@ public class Hospital
             System.out.println(contador1 + " - Consulta: " + consultorios1);
             contador1++;
         }
-        Integer escolhaLocal = InputHandler.digitarIntIntervalo("Digite o número do lacal de consulta: ", scanner, 1, consultorios.size());
+        Integer escolhaLocal = InputHandler.digitarIntIntervalo("Digite o número do local de consulta: ", scanner, 1, consultorios.size());
         String LocalEscolhido = this.consultorios.get(escolhaLocal - 1);
         LocalDateTime dataHora = InputHandler.lerDataHora("Digite a data e a hora da consulta (dessa forma: -dia/mês/ano hora:minutos-): ", scanner);
         if (IsHorarioOcupado(medicoEncontrado, LocalEscolhido, dataHora)) {
@@ -270,6 +284,8 @@ public class Hospital
         }
         Consultas novaconsultas = new Consultas(dataHora, null, LocalEscolhido, medicoEncontrado, pacienteEncontrado, StatusConsulta.AGENDADO, especialidadeescolhida);
         this.consultas.add(novaconsultas);
+        medicoEncontrado.adicionarAgendaOcupada(dataHora);
+        Arquivos.SalvarMedico(medicoEncontrado);
         System.out.println("\n--- Consulta Agendada com Sucesso! ---");
         System.out.println("Paciente: " + pacienteEncontrado.getNome());
         System.out.println("Médico: " + medicoEncontrado.getNome());

@@ -3,6 +3,7 @@ package entities;
 import enums.StatusConsulta;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Consultas
 {
@@ -64,5 +65,17 @@ public class Consultas
     public void setStatusConsulta(StatusConsulta statusConsulta) {
         this.statusConsulta = statusConsulta;
     }
-
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
+        String diagnosticoStr = (this.diagnostico == null) ? "" : this.diagnostico;
+        return String.join(";",
+                this.paciente.getCpf(),
+                this.medico.getCrm(),
+                this.dataHora.format(formatter),
+                this.local,
+                this.statusConsulta.name(),
+                this.especialidadeDaConsulta.getNome(),
+                diagnosticoStr
+        );
+    }
 }
