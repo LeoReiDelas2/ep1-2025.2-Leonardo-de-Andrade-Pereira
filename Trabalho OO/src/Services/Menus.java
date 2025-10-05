@@ -1,5 +1,6 @@
 package Services;
 
+import entities.Medico;
 import entities.Paciente;
 import utils.InputHandler;
 
@@ -25,13 +26,18 @@ public class Menus
                 menuOperacoes(scanner, hospital);
                 break;
             case 3:
-                System.out.println("--> nadaa");
                 //
                 for ( Paciente paciente : hospital.getPacientes())
                 {
                     System.out.println(paciente);
                 }
                  //
+                //
+                for ( Medico medico : hospital.getMedicos())
+                {
+                    System.out.println(medico);
+                }
+                //
                 break;
             case 0:
                 break;

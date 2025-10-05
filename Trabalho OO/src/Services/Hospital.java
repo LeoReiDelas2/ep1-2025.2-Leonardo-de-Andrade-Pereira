@@ -60,6 +60,10 @@ public class Hospital
         return internacoes;
     }
 
+    public static void setMedicos(List<Medico> medicos) {
+        Hospital.medicos = medicos;
+    }
+
     public void carregarEspecialidadesPadrao() {
         this.especialidades.add(new Especialidade("Cardiologia"));
         this.especialidades.add(new Especialidade("Pediatria"));
@@ -106,6 +110,7 @@ public class Hospital
                 Especialidade especialidade = getOrCreateEspecialidadePorNome(nomeEspecialidade);
                 novoMedico.adicionarEspecialidade(especialidade);
             }
+            Arquivos.SalvarMedico(novoMedico);
             this.medicos.add(novoMedico);
             System.out.println("\n--- Médico Cadastrado com Sucesso! ---");
             System.out.println(novoMedico);

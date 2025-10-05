@@ -1,6 +1,7 @@
 package utils;
 
 import Services.Hospital;
+import entities.Medico;
 import entities.Paciente;
 import entities.PacienteEspecial;
 
@@ -68,5 +69,26 @@ public class Arquivos
             pacientes.add(paciente);
         }
         Hospital.setPacientes(pacientes);
+    }
+    public static void SalvarMedico(Medico medico)
+    {
+        String crm = medico.getCrm();
+        String dados = medico.objectToString();
+        SalvarArquivo("medicos", crm + "medico", dados);
+    }
+    public static void carregarMedicos()
+    {
+        List<String> medicosarquivos = carregarArquivos("medicos", "medico.txt");
+        if (medicosarquivos == null)
+        {
+            return;
+        }
+        List<Medico> medicos = new ArrayList<>();
+        for (String medicoarquivo : medicosarquivos)
+        {
+            Medico medico = Medico.fromString(medicoarquivo);
+            medicos.add(medico);
+        }
+        Hospital.setMedicos(medicos);
     }
 }

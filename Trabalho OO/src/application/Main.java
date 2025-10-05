@@ -13,6 +13,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         hospital.carregarEspecialidadesPadrao();
         Arquivos.carregarPacientes();
+        Arquivos.carregarMedicos();
         int escolha;
         do{
             escolha = Menus.exibirMenuPrincipal(sc, hospital);

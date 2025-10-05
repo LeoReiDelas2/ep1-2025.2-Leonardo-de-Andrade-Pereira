@@ -117,6 +117,4 @@ public class Paciente {
         Paciente paciente = new Paciente(dados[0], dados[1], Integer.parseInt(dados[2]), historico, internacao);
         return paciente;
     }
-
-
 }

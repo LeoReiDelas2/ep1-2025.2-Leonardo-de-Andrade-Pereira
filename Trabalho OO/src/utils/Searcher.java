@@ -2,10 +2,12 @@ package utils;
 
 import Services.Hospital;
 import entities.Consultas;
+import entities.Especialidade;
 import entities.Medico;
 import entities.Paciente;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Searcher
@@ -47,6 +49,37 @@ public class Searcher
                 continue;
             }
             return consulta;
+        }
+        return null;
+    }
+    public static List<Especialidade> buscarEspecialidadesPorCrm(String crm) {
+        Medico medicoEncontrado = getMedicoBusca(crm, Hospital.getMedicos());
+        if (medicoEncontrado != null) {
+            return medicoEncontrado.getEspecialidades();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+    public static Consultas buscarConsultaPorMedicoEData(String crm, LocalDateTime data, List<Medico> todosOsMedicos, List<Consultas> todasAsConsultas) {
+        Medico medico = getMedicoBusca(crm, todosOsMedicos);
+
+        if (medico == null) {
+            return null;
+        }
+
+        for (Consultas consulta : todasAsConsultas) {
+            if (consulta.getMedico().equals(medico) && consulta.getDataHora().equals(data)) {
+                return consulta;
+            }
+        }
+
+        return null;
+    }
+    public static Especialidade buscarEspecialidadePorNome(String nome, List<Especialidade> listaDeEspecialidades) {
+        for (Especialidade esp : listaDeEspecialidades) {
+            if (esp.getNome().equalsIgnoreCase(nome.trim())) {
+                return esp;
+            }
         }
         return null;
     }
