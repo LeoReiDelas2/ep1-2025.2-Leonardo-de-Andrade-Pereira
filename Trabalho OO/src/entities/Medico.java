@@ -88,16 +88,20 @@ public class Medico {
             String dadoespecialidade = especialidade.getNome() + " ";
             dados += dadoespecialidade;
         }
-        return dados;
+        StringBuilder dadosformatado = new StringBuilder(dados);
+        dadosformatado.deleteCharAt(dados.length() - 1);
+        return dadosformatado.toString();
     }
     public String concatenarHorarios(List<LocalDateTime> horarios) {
         String dados = "";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
         for (LocalDateTime horario : horarios) {
-            String horarioFormatado = horario.format(formatter);
+            String horarioFormatado = horario.format(formatter).trim();
             dados += horarioFormatado + " ";
         }
-        return dados;
+        StringBuilder dadosformatado = new StringBuilder(dados);
+        dadosformatado.deleteCharAt(dados.length() - 1);
+        return dadosformatado.toString();
     }
     public static Medico fromString(String linha) {
         try {
@@ -109,7 +113,7 @@ public class Medico {
             if (dados.length > 3 && !dados[3].isBlank()) {
                 String[] nomesEspecialidades = dados[3].split(" ");
                 for (String nomeEsp : nomesEspecialidades) {
-                    Especialidade especialidade = new Especialidade(nomeEsp);
+                    Especialidade especialidade = Hospital.getOrCreateEspecialidadePorNome(nomeEsp);
                     medico.adicionarEspecialidade(especialidade);
                     Hospital.addEspecialidade(especialidade);
                 }

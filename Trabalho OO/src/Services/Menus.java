@@ -28,30 +28,7 @@ public class Menus
                 menuOperacoes(scanner, hospital);
                 break;
             case 3:
-                //
-                for ( Paciente paciente : hospital.getPacientes())
-                {
-                    System.out.println(paciente);
-                }
-                 //
-                //
-                for ( Medico medico : hospital.getMedicos())
-                {
-                    System.out.println(medico);
-                }
-                //
-                //
-                for (Consultas consulta : hospital.getConsultas())
-                {
-                    System.out.println(consulta);
-                }
-                //
-                //
-                for (Internacao internacao : hospital.getInternacoes())
-                {
-                    System.out.println(internacao);
-                }
-                //
+                menuRelatorios(scanner, hospital);
                 break;
             case 0:
                 break;
@@ -129,7 +106,68 @@ public class Menus
         }
 
     }
-
+    }
+    public static void menuRelatorios(Scanner scanner, Hospital hospital) {
+        while (true) {
+            System.out.println("\n=== MENU DE RELATÓRIOS ===");
+            System.out.println("1. Listar Pacientes");
+            System.out.println("2. Listar Médicos");
+            System.out.println("3. Listar Consultas");
+            System.out.println("4. Listar Internações");
+            System.out.println("5. Listar Planos de Saúde");
+            System.out.println("-------------------------");
+            System.out.println("6. Histórico de um Paciente");
+            System.out.println("7. Consultas de um Médico");
+            System.out.println("8. Internações Ativas");
+            System.out.println("-------------------------");
+            System.out.println("9. Estatísticas do Sistema");
+            System.out.println("0. Voltar");
+            System.out.println("=========================");
+            int escolha = InputHandler.digitarIntIntervalo("Escolha uma opção: ", scanner, 0, 9);
+            switch (escolha) {
+                case 0:
+                    return;
+                case 1:
+                    Relatorios.listarPacientes(Hospital.getPacientes());
+                    break;
+                case 2:
+                    Relatorios.listarMedicos(Hospital.getMedicos());
+                    break;
+                case 3:
+                    Relatorios.listarConsultas(Hospital.getHistoricu());
+                    break;
+                case 4:
+                    Relatorios.listarInternacoes(Hospital.getInternacoes());
+                    break;
+                case 5:
+                    Relatorios.listarPlanos(hospital.getPlanoDeSaude());
+                    break;
+                case 6:
+                    Relatorios.historicoPaciente(scanner, Hospital.getPacientes(), Hospital.getHistoricu());
+                    break;
+                case 7:
+                    Relatorios.consultasMedico(scanner, Hospital.getMedicos(), Hospital.getHistoricu());
+                    break;
+                case 8:
+                    Relatorios.internacoesAtivas(Hospital.getInternacoes());
+                    break;
+                case 9:
+                    Relatorios.estatisticas(
+                            Hospital.getPacientes(),
+                            Hospital.getMedicos(),
+                            Hospital.getHistoricu(),
+                            Hospital.getInternacoes(),
+                            hospital.getPlanoDeSaude(),
+                            hospital.getQuartos()
+                    );
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+                    break;
+            }
+            System.out.println("\nPressione ENTER para continuar...");
+            scanner.nextLine();
+        }
     }
 
 }

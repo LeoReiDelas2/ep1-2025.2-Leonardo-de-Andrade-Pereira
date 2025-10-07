@@ -35,7 +35,7 @@ public class Arquivos
         {
             return null;
         }
-        File [] arquivos = pastaArquivo.listFiles((dir, nome) -> nome.endsWith(nomearquivo));
+        File[] arquivos = pastaArquivo.listFiles((dir, nome) -> nome.endsWith(nomearquivo));
         if (arquivos == null)
         {
             return null;
@@ -85,7 +85,7 @@ public class Arquivos
         List<Medico> medicos = new ArrayList<>();
         for (String medicoarquivo : medicosarquivos)
         {
-            Medico medico = Medico.fromString(medicoarquivo);
+            Medico medico = Medico.fromString(medicoarquivo.replace("@",""));
             medicos.add(medico);
         }
         Hospital.setMedicos(medicos);
@@ -133,7 +133,7 @@ public class Arquivos
                 .format(java.time.format.DateTimeFormatter.ofPattern("ddMMyyyyHHmm"));
         String nomeArquivo = cpf + "_" + crm + "_" + dataFormatada + "internacao";
         String dados = internacao.objectToString();
-        SalvarArquivo("internacoes", nomeArquivo, dados);
+        SalvarArquivo("internacoes", nomeArquivo + "internacao", dados);
     }
     public static void carregarInternacoes()
     {
@@ -159,4 +159,33 @@ public class Arquivos
         }
         Hospital.setInternacoes(internacoes);
     }
+    public static void SalvarPlanoDeSaude(PlanoDeSaude plano)
+    {
+        String nomeArquivo = plano.getNome().replaceAll("\\s+", "_") + "plano";
+        String dados = plano.objectToString();
+
+        SalvarArquivo("planos", nomeArquivo + "plano", dados);
+    }
+    public static void carregarPlanosDeSaude()
+    {
+        List<String> planosarquivos = carregarArquivos("planos", "plano.txt");
+        if (planosarquivos == null)
+        {
+            return;
+        }
+        List<Especialidade> todasEspecialidades = Hospital.getEspecialidades();
+        List<PlanoDeSaude> planos = new ArrayList<>();
+        for (String planoarquivo : planosarquivos)
+        {
+            PlanoDeSaude plano = PlanoDeSaude.fromString(
+                    planoarquivo,
+                    todasEspecialidades
+            );
+            if (plano != null) {
+                planos.add(plano);
+            }
+        }
+        Hospital.setPlanoDeSaude(planos);
+    }
 }
+

@@ -16,6 +16,7 @@ public class Main {
         Arquivos.carregarMedicos();
         Arquivos.carregarConsultas();
         Arquivos.carregarInternacoes();
+        Arquivos.carregarPlanosDeSaude();
         int escolha;
         do{
             escolha = Menus.exibirMenuPrincipal(sc, hospital);

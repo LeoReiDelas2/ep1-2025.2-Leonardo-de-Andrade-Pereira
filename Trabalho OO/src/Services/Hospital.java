@@ -17,7 +17,7 @@ public class Hospital
     private static List<Medico> medicos;
     private static List<Consultas> consultas;
     private static List<Internacao> internacoes;
-    private List<PlanoDeSaude> planoDeSaude;
+    private static List<PlanoDeSaude> planoDeSaude;
     private List<Quarto> quartos;
     private static List<Especialidade> especialidades;
     private List<String> consultorios;
@@ -48,8 +48,8 @@ public class Hospital
         Hospital.internacoes = internacoes;
     }
 
-    public void setPlanoDeSaude(List<PlanoDeSaude> planoDeSaude) {
-        this.planoDeSaude = planoDeSaude;
+    public static void setPlanoDeSaude(List<PlanoDeSaude> planoDeSaude) {
+        Hospital.planoDeSaude = planoDeSaude;
     }
 
     public void setQuartos(List<Quarto> quartos) {
@@ -122,16 +122,16 @@ public class Hospital
         this.especialidades.add(new Especialidade("Dermatologia"));
     }
 
-    private Especialidade getOrCreateEspecialidadePorNome(String nome) {
+    public static Especialidade getOrCreateEspecialidadePorNome(String nome) {
         String nomeArrumado = nome.trim();
-        for (Especialidade esp : this.especialidades) {
+        for (Especialidade esp : Hospital.especialidades) {
             if (esp.getNome().equalsIgnoreCase(nomeArrumado)) {
                 return esp;
             }
         }
         System.out.println("-> Nova especialidade '" + nomeArrumado + "' criada no sistema.");
         Especialidade novaEspecialidade = new Especialidade(nomeArrumado);
-        this.especialidades.add(novaEspecialidade);
+        Hospital.especialidades.add(novaEspecialidade);
         return novaEspecialidade;
     }
 
@@ -249,8 +249,16 @@ public class Hospital
         } else {
             while (true) {
                 System.out.println("\nEspecialidades disponíveis:");
-                for (int i = 0; i < this.especialidades.size(); i++) {
-                    System.out.println((i + 1) + " - " + this.especialidades.get(i).getNome());
+                int i = 1;
+                ArrayList<Especialidade> ocorrencias = new ArrayList<>();
+                for (Especialidade especialidade : this.especialidades) {
+                    if (ocorrencias.contains(especialidade))
+                    {
+                        continue;
+                    }
+                    ocorrencias.add(especialidade);
+                    System.out.println(i +" - " + especialidade.getNome());
+                    i++;
                 }
                 int escolha = InputHandler.digitarIntIntervalo(
                         "Digite o número da especialidade para adicionar cobertura (ou 0 para finalizar): ",
@@ -261,7 +269,7 @@ public class Hospital
                 if (escolha == 0) {
                     break;
                 }
-                Especialidade espEscolhida = this.especialidades.get(escolha - 1);
+                Especialidade espEscolhida = ocorrencias.get(escolha - 1);
                 double desconto = InputHandler.lerDoubleIntervalo(
                         "Digite o desconto para " + espEscolhida.getNome() + " (0.0 a 1.0, ex: 0.2): ",
                         0.0,
@@ -272,6 +280,7 @@ public class Hospital
             }
         }
         this.planoDeSaude.add(novoPlano);
+        Arquivos.SalvarPlanoDeSaude(novoPlano);
         System.out.println("\n--- Plano de Saúde '" + novoPlano.getNome() + "' cadastrado com sucesso! ---");
     }
 
