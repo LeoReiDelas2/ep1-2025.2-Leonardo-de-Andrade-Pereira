@@ -121,9 +121,11 @@ public class Menus
             System.out.println("8. Internações Ativas");
             System.out.println("-------------------------");
             System.out.println("9. Estatísticas do Sistema");
+            System.out.println("10. Especialidades mais procuradas");
+            System.out.println("11. Médicos que mais atenderam");
             System.out.println("0. Voltar");
             System.out.println("=========================");
-            int escolha = InputHandler.digitarIntIntervalo("Escolha uma opção: ", scanner, 0, 9);
+            int escolha = InputHandler.digitarIntIntervalo("Escolha uma opção: ", scanner, 0, 11);
             switch (escolha) {
                 case 0:
                     return;
@@ -160,6 +162,12 @@ public class Menus
                             hospital.getPlanoDeSaude(),
                             hospital.getQuartos()
                     );
+                    break;
+                case 10:
+                    Relatorios.especialidadeMaisProcurada(Hospital.getHistoricu(), Hospital.getEspecialidades());
+                    break;
+                case 11:
+                    Relatorios.medicoMaisAtendeu(Hospital.getHistoricu(), Hospital.getMedicos());
                     break;
                 default:
                     System.out.println("Opção inválida.");

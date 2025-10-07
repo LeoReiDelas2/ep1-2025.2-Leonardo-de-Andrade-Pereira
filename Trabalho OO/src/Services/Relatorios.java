@@ -155,7 +155,7 @@ public class Relatorios
     public static void estatisticas(List<Paciente> pacientes, List<Medico> medicos,
                                     List<Consultas> consultas, List<Internacao> internacoes,
                                     List<PlanoDeSaude> planos, List<Quarto> quartos) {
-        System.out.println("\n=== ESTATÍSTICAS DO SISTEMA ===");
+        System.out.println("\n=== ESTATISTICAS DO SISTEMA ===");
         System.out.println("Pacientes: " + pacientes.size());
         System.out.println("Médicos: " + medicos.size());
         System.out.println("Planos de Saúde: " + planos.size());
@@ -191,5 +191,74 @@ public class Relatorios
         System.out.println("  Total: " + quartos.size());
         System.out.println("  Ocupados: " + ocupados);
         System.out.println("  Disponíveis: " + (quartos.size() - ocupados));
+    }
+    public static void medicoMaisAtendeu(List<Consultas> consultas, List<Medico> medicos) {
+        System.out.println("\n=== MÉDICO QUE MAIS ATENDEU ===");
+        if (consultas.isEmpty()) {
+            System.out.println("Nenhuma consulta registrada no sistema.");
+            return;
+        }
+        if (medicos.isEmpty()) {
+            System.out.println("Nenhum médico cadastrado no sistema.");
+            return;
+        }
+        Medico medicoMaisConsultas = null;
+        int maxConsultas = 0;
+        for (Medico medico : medicos) {
+            int contadorConsultas = 0;
+
+            for (Consultas consulta : consultas) {
+                if (consulta.getMedico().getCrm().equals(medico.getCrm())) {
+                    contadorConsultas++;
+                }
+            }
+            if (contadorConsultas > maxConsultas) {
+                maxConsultas = contadorConsultas;
+                medicoMaisConsultas = medico;
+            }
+        }
+        if (medicoMaisConsultas != null && maxConsultas > 0) {
+            System.out.println("Médico: Dr(a). " + medicoMaisConsultas.getNome());
+            System.out.println("CRM: " + medicoMaisConsultas.getCrm());
+            System.out.println("Total de Consultas: " + maxConsultas);
+        } else {
+            System.out.println("Nenhum médico realizou consultas ainda.");
+        }
+    }
+    public static void especialidadeMaisProcurada(List<Consultas> consultas, List<Especialidade> especialidades) {
+        System.out.println("\n=== ESPECIALIDADE MAIS PROCURADA ===");
+        if (consultas.isEmpty()) {
+            System.out.println("Nenhuma consulta registrada no sistema.");
+            return;
+        }
+        if (especialidades.isEmpty()) {
+            System.out.println("Nenhuma especialidade cadastrada no sistema.");
+            return;
+        }
+        String especialidadeMaisProcurada = null;
+        int maxConsultas = 0;
+        boolean temConsultas = false;
+        for (Especialidade especialidade : especialidades) {
+            int contadorConsultas = 0;
+            for (Consultas consulta : consultas) {
+                if (consulta.getEspecialidadeDaConsulta().getNome().equals(especialidade.getNome())) {
+                    contadorConsultas++;
+                }
+            }
+            if (contadorConsultas > maxConsultas) {
+                maxConsultas = contadorConsultas;
+                especialidadeMaisProcurada = especialidade.getNome();
+            }
+            if (contadorConsultas > 0) {
+                System.out.println(especialidade.getNome() + ": " + contadorConsultas + " consultas");
+                temConsultas = true;
+            }
+        }
+        System.out.println();
+        if (!temConsultas) {
+            System.out.println("Nenhuma especialidade foi procurada ainda.");
+        } else if (especialidadeMaisProcurada != null) {
+            System.out.println("A mais procurada é: " + especialidadeMaisProcurada + " (" + maxConsultas + " consultas)");
+        }
     }
 }

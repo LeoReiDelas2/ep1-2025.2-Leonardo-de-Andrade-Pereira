@@ -82,26 +82,38 @@ public class Medico {
     }
     public String concatenarEspecialidades(List<Especialidade> especialidades)
     {
+        if (especialidades == null || especialidades.isEmpty()) {
+            return "";
+        }
         String dados = "";
-        for ( Especialidade especialidade : especialidades)
+        for (Especialidade especialidade : especialidades)
         {
             String dadoespecialidade = especialidade.getNome() + " ";
             dados += dadoespecialidade;
         }
-        StringBuilder dadosformatado = new StringBuilder(dados);
-        dadosformatado.deleteCharAt(dados.length() - 1);
-        return dadosformatado.toString();
+        if (!dados.isEmpty()) {
+            StringBuilder dadosformatado = new StringBuilder(dados);
+            dadosformatado.deleteCharAt(dados.length() - 1);
+            return dadosformatado.toString();
+        }
+        return dados;
     }
     public String concatenarHorarios(List<LocalDateTime> horarios) {
+        if (horarios == null || horarios.isEmpty()) {
+            return "";
+        }
         String dados = "";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
         for (LocalDateTime horario : horarios) {
             String horarioFormatado = horario.format(formatter).trim();
             dados += horarioFormatado + " ";
         }
-        StringBuilder dadosformatado = new StringBuilder(dados);
-        dadosformatado.deleteCharAt(dados.length() - 1);
-        return dadosformatado.toString();
+        if (!dados.isEmpty()) {
+            StringBuilder dadosformatado = new StringBuilder(dados);
+            dadosformatado.deleteCharAt(dados.length() - 1);
+            return dadosformatado.toString();
+        }
+        return dados;
     }
     public static Medico fromString(String linha) {
         try {
