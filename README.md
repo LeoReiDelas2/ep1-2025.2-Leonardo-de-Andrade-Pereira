@@ -52,7 +52,7 @@ Desenvolvimento de um sistema de gerenciamento hospitalar utilizando os conceito
 2. Agendamento de Consulta:  
    <img width="1731" height="780" alt="image" src="https://github.com/user-attachments/assets/609363b6-0511-4565-a259-a6f834022a02" />
 
-3. Relatório de ?:  
+3. Relatório de Menu de Relatórios:  
    <img width="1744" height="771" alt="image" src="https://github.com/user-attachments/assets/5d84d98d-3675-48e2-b705-48ddcdaf75c2" />
 
 ---
