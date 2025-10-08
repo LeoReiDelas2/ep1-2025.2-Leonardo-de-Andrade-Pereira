@@ -26,12 +26,12 @@ Desenvolvimento de um sistema de gerenciamento hospitalar utilizando os conceito
    [Para executar, utilize: java -cp bin application.Main]
 
 3. **Estrutura de Pastas:**  
-   [src/
-   ├── application/  (Contém a classe Main, o ponto de entrada do programa)
-   ├── entities/     (Contém as classes de modelo como Paciente, Medico, Consulta, etc.)
-   ├── enums/        (Contém as enumerações como StatusConsulta)
-   ├── Services/     (Contém as classes com a lógica de negócio como Hospital e Menus)
-   └── utils/        (Contém as classes utilitárias como GerenciadorDeArquivos e InputHandler)]
+src
+├── application/  -> Contém a classe Main, o ponto de entrada da aplicação.
+├── entities/     -> Classes de modelo que representam os dados do sistema (Paciente, Medico, etc.).
+├── enums/        -> Tipos de dados enumerados (StatusConsulta).
+├── Services/     -> Classes que contêm a lógica de negócio e os fluxos de interação (Hospital, Menus, Relatorios).
+└── utils/        -> Classes utilitárias e ferramentas genéricas (GerenciadorDeArquivos, InputHandler, Searcher).
 
 3. **Versão do JAVA utilizada:**  
    [Este projeto foi desenvolvido e testado utilizando o Java Development Kit (JDK) 17.]
