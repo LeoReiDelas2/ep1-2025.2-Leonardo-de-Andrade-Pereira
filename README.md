@@ -61,7 +61,7 @@ Desenvolvimento de um sistema de gerenciamento hospitalar utilizando os conceito
 
 ## Observações (Extras ou Dificuldades)
 
-- [Primeiramente, o trabalho foi um susto bem grande, nã]
+- [Primeiramente, o trabalho foi um susto bem grande, não sabia nada de Java, me forcei a aprender primeiro, aprendendo o máximo de conteúdo nas primeiras semanas, para depois começar o trabalho em si. Ademais, foi uma experiência muito boa de aprendizado, sei que posso melhor bastante em vários pontos, mas para um primeiro trabalho e um código, está legal, e fazer os métodos principais foi bem díficil e demandou bastante esforço.]
 
 ---
 
