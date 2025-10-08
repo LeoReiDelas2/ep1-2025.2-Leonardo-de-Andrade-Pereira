@@ -10,26 +10,31 @@ Desenvolvimento de um sistema de gerenciamento hospitalar utilizando os conceito
 
 ## Dados do Aluno
 
-- **Nome completo:** [Preencher aqui]
-- **Matrícula:** [Preencher aqui]
-- **Curso:** [Preencher aqui]
-- **Turma:** [Preencher aqui]
+- **Nome completo:** [Leonardo de Andrade Pereira]
+- **Matrícula:** [251012340]
+- **Curso:** [Engenharias]
+- **Turma:** [02]
 
 ---
 
 ## Instruções para Compilação e Execução
 
 1. **Compilação:**  
-   [Descrever aqui como compilar o projeto. Exemplo: `javac Main.java` ou o script usado]
+   [Para compilar o projeto, abra um terminal na pasta raiz do projeto (a que contém a pasta `src`) e execute o seguinte comando: javac -d bin -cp src src/application/Main.java]
 
 2. **Execução:**  
-   [Descrever aqui como executar o projeto. Exemplo: `java Main` ou o script usado]
+   [Para executar, utilize: java -cp bin application.Main]
 
 3. **Estrutura de Pastas:**  
-   [Descrever aqui as principais pastas do projeto]
+   [src/
+   ├── application/  (Contém a classe Main, o ponto de entrada do programa)
+   ├── entities/     (Contém as classes de modelo como Paciente, Medico, Consulta, etc.)
+   ├── enums/        (Contém as enumerações como StatusConsulta)
+   ├── Services/     (Contém as classes com a lógica de negócio como Hospital e Menus)
+   └── utils/        (Contém as classes utilitárias como GerenciadorDeArquivos e InputHandler)]
 
 3. **Versão do JAVA utilizada:**  
-   [Descrever aqui como versão do JAVA utilizada no projeto. Sugestão: `java 21`]
+   [Este projeto foi desenvolvido e testado utilizando o Java Development Kit (JDK) 17.]
 
 ---
 
@@ -42,13 +47,13 @@ Desenvolvimento de um sistema de gerenciamento hospitalar utilizando os conceito
 ## Prints da Execução
 
 1. Menu Principal:  
-   ![Inserir Print 1](caminho/do/print1.png)
+   <img width="1753" height="798" alt="image" src="https://github.com/user-attachments/assets/700f1ab3-7af1-45f2-bbeb-09abadfc246a" />
 
 2. Cadastro de Médico:  
-   ![Inserir Print 2](caminho/do/print2.png)
+   <img width="1743" height="766" alt="image" src="https://github.com/user-attachments/assets/2eab5fc3-6766-4c59-a134-ace3ae8b880a" />
 
 3. Relatório de ?:  
-   ![Inserir Print 3](caminho/do/print3.png)
+   <img width="1739" height="723" alt="image" src="https://github.com/user-attachments/assets/b586fafb-b07b-418b-a459-2d19d45c795e" />
 
 ---
 
@@ -56,13 +61,13 @@ Desenvolvimento de um sistema de gerenciamento hospitalar utilizando os conceito
 
 ## Observações (Extras ou Dificuldades)
 
-- [Espaço para o aluno comentar qualquer funcionalidade extra que implementou, dificuldades enfrentadas, ou considerações importantes.]
+- [Primeiramente, o trabalho foi um susto bem grande, nã]
 
 ---
 
 ## Contato
 
-- [Opcional: E-mail pessoal do aluno.]
+- [leonardodeandrade1610@gmail.com]
 
 ---
 
